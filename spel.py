@@ -18,13 +18,13 @@ class Monster:
     def __init__(self):
         self.monster_hp = rand.randint(2, 5) * player.strength
         self.monster_strength = 10 * player.level
-        self.name = rand.choice(["Golem", "Goblin", "Dragon", "Wyvern"])
+        self.type = rand.choice(["Golem", "Goblin", "Dragon", "Wyvern"])
 
 
 def monster_battle(player):
     monster = Monster()
     print(f"""
-            You have encountered a {monster.name}!
+            You have encountered a {monster.type}!
             Monster hp: {monster.monster_hp}   
             Monster strength: {monster.monster_strength}
 
@@ -41,13 +41,22 @@ def monster_battle(player):
             print(f"Monster hp: {monster.monster_hp}")
             if monster.monster_hp <= 0:
                 xp = monster.monster_strength
-                print(f"You have slain the {monster.name} and received {xp} experience!")
+                print(f"You have slain the {monster.type} and received {xp} experience!")
                 if xp >= 10:
                     print("Your level has risen!")
                     player.level += 1
         else:
             print("You fled!")
             break
+        if player.hp <= 0:
+                    print("You died")
+
+def trap(player):
+    trap_damage = rand.randint(5, 10)
+    player.hp = player.hp - trap_damage
+    print(f"You have been caught in a trap and lost {trap_damage} HP!")
+    if player.hp <= 0:
+        print("You died")
 
 def display_stats(player):
     print(f"HP: {player.hp}")
@@ -81,8 +90,6 @@ def main():
             scenario = rand.randint(1, 3)
             if scenario == 1:
                 monster_battle(player)
-                if player.hp <= 0:
-                    print("You died")
             elif scenario == 2:
                 item_in_chest(player)
                 if len(player.inventory) > 4:
@@ -96,11 +103,7 @@ def main():
                     except:
                         print("Choose an index within list range!")
             elif scenario == 3:
-                trap_damage = rand.randint(1, 4)
-                player.hp = player.hp - trap_damage
-                print(f"You have been caught in a trap and lost {trap_damage} HP!")
-                if player.hp <= 0:
-                    print("You died")
+                trap(player)
         elif choice == "2":
             for item in player.inventory:
                 print(f"{item.name} with strength bonus {item.strength_bonus}")
