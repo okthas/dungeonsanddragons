@@ -16,43 +16,38 @@ player = Player()
 
 class Monster:
     def __init__(self):
-        self.monster_hp = rand.randint(5, 10) * player.strength
-        self.monster_strength = rand.randint(2, 5) * player.level
-        self.monster = rand.choice(["Golem", "Goblin", "Dragon", "Wyvern"])
+        self.monster_hp = rand.randint(2, 5) * player.strength
+        self.monster_strength = 10 * player.level
+        self.name = rand.choice(["Golem", "Goblin", "Dragon", "Wyvern"])
 
-def monster_battle():
+
+def monster_battle(player):
+    monster = Monster()
     print(f"""
-            You have encountered a {monster.monster}!
+            You have encountered a {monster.name}!
             Monster hp: {monster.monster_hp}   
             Monster strength: {monster.monster_strength}
 
             """)
     while monster.monster_hp > 0:
-            print(f"""
+        print(f"""
             1. Attack
             2. Flee
 
-            """)
-            choose = input("Attack or flee?  ")
-            if choose == "1":
-                monster.monster_hp -= player.strength
-                player.hp -= monster.monster_strength
-                print(f"Monster hp: {monster.monster_hp}")
-                if monster.monster_hp <= 0:
-                    print(f"You have slain the {monster.monster}!")
-                    xp = monster.monster_strength
-                    print(f"You have recieved {xp} experience!")
-            else:
-                print("You fled!")
-                break
-    sum_xp = 0
-    sum_xp += xp
-    if sum_xp > 10:
-        print("Your level has increased!")
-        player.level += sum_xp
-        player.strength += 2
-
-monster = Monster()
+        """)
+        choose = input("Attack or flee?  ")
+        if choose == "1":
+            monster.monster_hp -= player.strength
+            print(f"Monster hp: {monster.monster_hp}")
+            if monster.monster_hp <= 0:
+                xp = monster.monster_strength
+                print(f"You have slain the {monster.name} and received {xp} experience!")
+                if xp >= 10:
+                    print("Your level has risen!")
+                    player.level += 1
+        else:
+            print("You fled!")
+            break
 
 def display_stats(player):
     print(f"HP: {player.hp}")
@@ -85,7 +80,7 @@ def main():
         if choice == "1":
             scenario = rand.randint(1, 3)
             if scenario == 1:
-                monster_battle()
+                monster_battle(player)
                 if player.hp <= 0:
                     print("You died")
             elif scenario == 2:
