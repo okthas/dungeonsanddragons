@@ -22,7 +22,8 @@ class Monster:
     def __init__(self, player):
         self.monster_hp = rand.randint(2, 5) * player.strength
         self.monster_strength = 10 * player.level
-        self.type = rand.choice(["Golem", "Goblin", "Dragon", "Wyvern"])
+        self.type = rand.choice(["Golem", "Goblin", "Dragon"])
+        self.experience_value = 5
 
 def monster_battle(player):
     monster = Monster(player)
@@ -43,14 +44,14 @@ def monster_battle(player):
             monster.monster_hp -= player.strength
             print(f"Monster hp: {monster.monster_hp}")
             if monster.monster_hp <= 0:
-                xp = monster.monster_strength/2
+                xp = monster.experience_value
+                player.experience += xp
                 print(f"You have slain the {monster.type} and received {xp} experience!")
-                if xp >= 10:
-                    print("Your level has risen!")
-                    player.experience += xp
-                    if player.experience >= 10:
-                        player.level += 1
-                        print("Your level has increased!")
+            if player.experience >= 10:
+                print("Your level has risen!")
+                if player.experience >= 10:
+                    player.level += 1
+                    print("Your level has increased!")
         else:
             print("You fled!")
             break
