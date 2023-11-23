@@ -12,19 +12,19 @@ class Player:
 class Item:
     def __init__(self, player):
         if player.level >= 7:
-            x = 2
-            z = rand.randint(0,20)
-            if z == 6:
-                x = 3
+            x = 2          
         elif player.level >= 5:
             x = 1
         else: 
             x = 0
-        if x == 3:
+        z = rand.randint(0,100)
+        if z == 3:
+            self.Attribute = "Strength bonus"
             self.name = f"Excalibur ({player.level})"
-            self.strength_bonus = 30 + 5*player.level
+            self.strength_bonus = 15 + player.level**1.6
             player.strength += self.strength_bonus
-        self.name = rand.choice(["Sword", "Shield", "Bow", "Armor", "J", "J", "J", "J"])
+        if z != 3:
+            self.name = rand.choice(["Sword", "Shield", "Bow", "Armor", "J", "J", "J"])
         if self.name == "Armor":
             self.Attribute = "Health bonus"
             level = rand.randint(0,x)
@@ -58,7 +58,7 @@ class Item:
         elif self.name == "J":
             self.name = "Health potion"
             self.Attribute = "Health potion"
-            self.health_bonus = 4 + player.level*2.4
+            self.health_bonus = 3.7 + player.level*2.1
             player.hp += self.health_bonus
             if player.hp > player.hp_max:
                 player.hp = player.hp_max
@@ -86,25 +86,25 @@ class Item:
                 player.strength += self.strength_bonus
             elif level == 1:
                 self.name = f"Compound bow ({player.level})"
-                self.strength_bonus = 7 + 2*player.level
+                self.strength_bonus = 7 + 1.4*player.level
                 player.strength += self.strength_bonus
             elif level == 2:
                 self.name = f"Enchanted bow ({player.level})"
-                self.strength_bonus = 15 + 3*player.level
+                self.strength_bonus = 15 + 2*player.level
                 player.strength += self.strength_bonus
 
 class Monster:
     def __init__(self, player):
         self.type = rand.choice(["Golem", "Goblin", "Dragon"])
         if self.type == "Golem":
-            self.monster_strength = 15 + player.level*2.6
-            self.monster_hp = 16 + player.level*3.2
+            self.monster_strength = 12 + player.level*2.9
+            self.monster_hp = 14 + player.level*3.7
         elif self.type == "Goblin":
-            self.monster_strength = 6 + player.level*1.6
-            self.monster_hp = 8 + player.level*2.4
+            self.monster_strength = 4 + player.level*1.9
+            self.monster_hp = 5 + player.level*2.9
         elif self.type == "Dragon":
-            self.monster_strength = 36 + player.level*3.8
-            self.monster_hp = 38 + player.level*4
+            self.monster_strength = 33 + player.level*4.1
+            self.monster_hp = 35 + player.level*4.4
         self.experience_x = self.monster_strength + self.monster_hp
         self.experience_value = self.experience_x*0.5
 
@@ -126,8 +126,8 @@ def monster_battle(player, dmg_multiplier):
         if choose == "1":
             while monster.monster_hp > 0:
                 dmg = player.strength * dmg_multiplier
+                player.hp -= monster.monster_strength/dmg
                 monster.monster_hp -= player.strength
-                player.hp -= 2*monster.monster_strength/dmg
             if player.hp <= 0:
                     print("""
                           You died
@@ -136,8 +136,8 @@ def monster_battle(player, dmg_multiplier):
                 xp = monster.experience_value
                 player.experience += xp
                 print(f"You have slain the {monster.type} and received {round(xp,2)} experience!")
-                if player.experience >= 24 + player.level**1.4:
-                    player.experience -= 24 + player.level**1.4
+                if player.experience >= 24 + player.level**1.6:
+                    player.experience -= 24 + player.level**1.6
                     player.level += 1
                     player.hp += 1
                     player.hp_max += 1
@@ -152,7 +152,7 @@ def monster_battle(player, dmg_multiplier):
 def trap(player):
     y = rand.randint(0,1)
     if y == 0:
-        trap_damage = 0.3*rand.randint(0, 2) + 1.1*player.level
+        trap_damage = 0.5*rand.randint(0, 2) + 0.9*player.level
         player.hp -= trap_damage
         print(f"You have been caught in a trap and lost {round(trap_damage,2)} HP!")
     else:
@@ -163,10 +163,10 @@ def trap(player):
               """)
 
 def display_stats(player):
-    print(f"HP: {round(player.hp,2)}/{round(player.hp_max,2)}")
+    print(f"Experience: {round(player.experience,2)}/{round(24 + player.level**1.6,2)}")
     print(f"Level: {player.level}")
     print(f"Strength: {round(player.strength,2)}")
-    print(f"Experience: {round(player.experience,2)}/{24 + player.level**1.4}")
+    print(f"HP: {round(player.hp,2)}/{round(player.hp_max,2)}")
 
 def item_in_chest(player):
     item = Item(player)
@@ -181,10 +181,11 @@ def item_in_chest(player):
 
 def show_inventory(player):
     for item in player.inventory:
-        if item.Attribute == "Strength bonus":
-            print(f"{item.name} with strength bonus {item.strength_bonus}") #
-        else:
-            print(f"{item.name} with health bonus {item.health_bonus}") #
+        #if item.Attribute == "Strength bonus":
+        try:
+            print(f"{item.name} with strength bonus {round(item.strength_bonus,2)}") #
+        except:
+            print(f"{item.name} with health bonus {round(item.health_bonus,2)}") # it seems to show at random, which is annoying if u wanna know what weapon ur deleting
 
 
 def main():
@@ -225,7 +226,7 @@ def main():
                 player = monster_battle(player, dmg_multiplier)
             elif scenario == 2:
                 item_in_chest(player)
-                if len(player.inventory) > 3:
+                if len(player.inventory) > 4:
                     try:
                         print("""
                               Your inventory is full! Pick something to exchange!
@@ -241,7 +242,7 @@ def main():
                               """)
                         print("Your inventory is full! Pick something to exchange!")
                         show_inventory(player)
-                        remove_index = int(input("Remove index: "))-2
+                        remove_index = int(input("Remove index: "))-1
                         index = player.inventory[remove_index]
                         player.inventory.remove(index)
             elif scenario == 3:
