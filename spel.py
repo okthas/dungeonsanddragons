@@ -96,20 +96,20 @@ class Player:
 # if self.Attribute == "Health bonus":
     # for item in player.inventory
     #     if item == "Leather armor":
-    #         self.health_bonus = 3 + player.level
-    #         player.hp_max += self.health_bonus
+    #         self.health_bonus += 3 + player.level
     #     else:
-    #         self.health_bonus = self.health_bonus
+    #         self.health_bonus = self.health_bonus //////////
+    # strength bonus, and health bonus total gets added to your stats aka: the bonus is stored in a different variable that only increases stats based on the total boost in your inventory
 class Item:
     def __init__(self, player):
         if player.level >= 7:
             x = 2    
-            z = rand.randint(0,100)
+            z = rand.randint(0,33)
             if z == 3:
                 self.Attribute = "Strength bonus"
                 self.name = f"Excalibur ({player.level})"
                 self.strength_bonus = 15 + player.level**1.6
-                player.strength += self.strength_bonus   
+                player.strength += self.strength_bonus   # when youre level 7 or higher theres a 1% chance to get excalibur
                 return None   
         elif player.level >= 5:
             x = 1
