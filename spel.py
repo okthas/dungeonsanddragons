@@ -291,10 +291,10 @@ def show_inventory(player):
 def main():
     player = Player()
     dmg_multiplier = input("""
-                       Choose difficulty:
-                       1. Easy
-                       2. Medium
-                       3. Hard
+                Choose difficulty:
+                1. Easy
+                2. Medium
+                3. Hard
 
 
 --> """)
@@ -334,12 +334,16 @@ def main():
                         show_inventory(player)
                         remove_index = int(input("Remove index: "))
                         index = player.inventory[remove_index-1]
-                        print(index) # index == <__main__.Item object at (code)> which means you cant use it with Item()
-                        # item = Item(index)
-                        # if item.Attribute == "Strength bonus":
-                        #     player.strength -= item.strength_bonus
-                        # else:
-                        #     player.hp -= item.health_bonus
+                        # print(index) # index == <__main__.Item object at (code)> which means you cant use it with Item()
+                        for item in player.inventory:
+                            if item == player.inventory[remove_index-1]:
+                                if item.Attribute == "Strength bonus":
+                                    player.strength -= item.strength_bonus
+                                    #player.inventory.remove(index)
+                                else:
+                                    player.hp -= item.health_bonus
+                                    #player.inventory.remove(index)
+                            else: None
                         player.inventory.remove(index)
                     except:
                         print(""""
@@ -350,7 +354,16 @@ def main():
                         show_inventory(player)
                         remove_index = int(input("Remove index: ")) # or: stat... -= stat of weapon, item.health_bonus/item.strength_bonus
                         index = player.inventory[remove_index-1]
-                        print(index)
+                        for item in player.inventory:
+                            if item == player.inventory[remove_index-1]:
+                                if item.Attribute == "Strength bonus":
+                                    player.strength -= item.strength_bonus
+                                    #player.inventory.remove(index)
+                                else:
+                                    player.hp -= item.health_bonus
+                                    #player.inventory.remove(index)
+                            else: None
+                        # print(index)
                         # item = Item(index)
                         # if item.Attribute == "Strength bonus":
                         #     player.strength -= item.strength_bonus
