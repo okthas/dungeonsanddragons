@@ -224,8 +224,6 @@ def item_in_chest(player):
 
 def show_inventory(player):
     for item in player.inventory:
-        # if item.Attribute == "Strength bonus":
-        # else:
         try:
             print(f"{item.name} with strength bonus {round(item.strength_bonus,2)}")
         except:
@@ -278,15 +276,12 @@ def main():
                         show_inventory(player)
                         remove_index = int(input("Remove index: "))
                         index = player.inventory[remove_index-1]
-                        # print(index) # index == <__main__.Item object at (code)> which means you cant use it with Item()
                         for item in player.inventory:
                             if item == player.inventory[remove_index-1]:
                                 if item.Attribute == "Strength bonus":
                                     player.strength -= item.strength_bonus
-                                    #player.inventory.remove(index)
                                 else:
                                     player.hp_max -= item.health_bonus
-                                    #player.inventory.remove(index)
                             else: None
                         player.inventory.remove(index)
                         if player.hp > player.hp_max:
@@ -298,23 +293,15 @@ def main():
                               """)
                         print("Your inventory is full! Pick something to exchange!")
                         show_inventory(player)
-                        remove_index = int(input("Remove index: ")) # or: stat... -= stat of weapon, item.health_bonus/item.strength_bonus
+                        remove_index = int(input("Remove index: "))
                         index = player.inventory[remove_index-1]
                         for item in player.inventory:
                             if item == player.inventory[remove_index-1]:
                                 if item.Attribute == "Strength bonus":
                                     player.strength -= item.strength_bonus
-                                    #player.inventory.remove(index)
                                 else:
                                     player.hp_max -= item.health_bonus
-                                    #player.inventory.remove(index)
                             else: None
-                        # print(index)
-                        # item = Item(index)
-                        # if item.Attribute == "Strength bonus":
-                        #     player.strength -= item.strength_bonus
-                        # else:
-                        #     player.hp -= item.health_bonus
                         player.inventory.remove(index)
                         if player.hp > player.hp_max:
                             player.hp = player.hp_max
@@ -329,5 +316,4 @@ def main():
         else:
             print("Could not execute command") # makes the code look badass B)
 main()
-#1.8 (hp)
-#1.2 (strength)
+#x, y and z are just throwaway variables used for randomizing choices, aka: chance
