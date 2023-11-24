@@ -12,25 +12,25 @@ class Player:
 class Item:
     def __init__(self, player):
         if player.level >= 7:
-            x = 2          
+            x = 2    
+            z = rand.randint(0,100)
+            if z == 3:
+                self.Attribute = "Strength bonus"
+                self.name = f"Excalibur ({player.level})"
+                self.strength_bonus = 15 + player.level**1.6
+                player.strength += self.strength_bonus   
+                return None   
         elif player.level >= 5:
             x = 1
         else: 
             x = 0
-        z = rand.randint(0,100)
-        if z == 3:
-            self.Attribute = "Strength bonus"
-            self.name = f"Excalibur ({player.level})"
-            self.strength_bonus = 15 + player.level**1.6
-            player.strength += self.strength_bonus
-        if z != 3:
-            self.name = rand.choice(["Sword", "Shield", "Bow", "Armor", "J", "J", "J"])
+        self.name = rand.choice(["Sword", "Shield", "Bow", "Armor", "J", "J", "J"])
         if self.name == "Armor":
             self.Attribute = "Health bonus"
             level = rand.randint(0,x)
             if level == 0:
                 self.name = f"Leather armor ({player.level})"
-                self.health_bonus = 3 + player.level
+                self.health_bonus = 3 + player.level # only if [item] is in player.inventory
                 player.hp_max += self.health_bonus
             elif level == 1:
                 self.name = f"Iron armor ({player.level})"
@@ -58,7 +58,7 @@ class Item:
         elif self.name == "J":
             self.name = "Health potion"
             self.Attribute = "Health potion"
-            self.health_bonus = 3.7 + player.level*2.1
+            self.health_bonus = 3.7 + player.level*2.5
             player.hp += self.health_bonus
             if player.hp > player.hp_max:
                 player.hp = player.hp_max
@@ -95,16 +95,22 @@ class Item:
 
 class Monster:
     def __init__(self, player):
-        self.type = rand.choice(["Golem", "Goblin", "Dragon"])
-        if self.type == "Golem":
-            self.monster_strength = 12 + player.level*2.9
-            self.monster_hp = 14 + player.level*3.7
-        elif self.type == "Goblin":
-            self.monster_strength = 4 + player.level*1.9
-            self.monster_hp = 5 + player.level*2.9
-        elif self.type == "Dragon":
-            self.monster_strength = 33 + player.level*4.1
-            self.monster_hp = 35 + player.level*4.4
+        a = rand.randint(0,5)
+        if a == 4:
+            self.type = "Charizard"
+            self.monster_strength = 45 + player.level*5
+            self.monster_hp = 60 + player.level*6
+        else:
+            self.type = rand.choice(["Golem", "Goblin", "Dragon"])
+            if self.type == "Golem":
+                self.monster_strength = 12 + player.level*2.9
+                self.monster_hp = 14 + player.level*3.7
+            elif self.type == "Goblin":
+                self.monster_strength = 4 + player.level*1.9
+                self.monster_hp = 5 + player.level*2.9
+            elif self.type == "Dragon":
+                self.monster_strength = 33 + player.level*4.1
+                self.monster_hp = 35 + player.level*4.4
         self.experience_x = self.monster_strength + self.monster_hp
         self.experience_value = self.experience_x*0.5
 
@@ -132,16 +138,17 @@ def monster_battle(player, dmg_multiplier):
                     print("""
                           You died
                           """)
+                    exit()
             if monster.monster_hp <= 0:
                 xp = monster.experience_value
                 player.experience += xp
                 print(f"You have slain the {monster.type} and received {round(xp,2)} experience!")
-                if player.experience >= 24 + player.level**1.6:
+                while player.experience >= 24 + player.level**1.6:
                     player.experience -= 24 + player.level**1.6
                     player.level += 1
-                    player.hp += 1
-                    player.hp_max += 1
-                    player.strength += 1
+                    player.hp += 1 + player.level**1.4
+                    player.hp_max += 1 + player.level**1.4
+                    player.strength += 1 + player.level**1.2
                     print(f"Your level has increased! You're now level {player.level}!")
         else:
             print("You fled!")
@@ -181,9 +188,10 @@ def item_in_chest(player):
 
 def show_inventory(player):
     for item in player.inventory:
-        #if item.Attribute == "Strength bonus":
+        # if item.Attribute == "Strength bonus":
+        # else:
         try:
-            print(f"{item.name} with strength bonus {round(item.strength_bonus,2)}") #
+            print(f"{item.name} with strength bonus {round(item.strength_bonus,2)}")
         except:
             print(f"{item.name} with health bonus {round(item.health_bonus,2)}") # it seems to show at random, which is annoying if u wanna know what weapon ur deleting
 
