@@ -285,8 +285,7 @@ def show_inventory(player):
         try:
             print(f"{item.name} with strength bonus {round(item.strength_bonus,2)}")
         except:
-            print(f"{item.name} with health bonus {round(item.health_bonus,2)}") # it seems to show at random, which is annoying if u wanna know what item ur deleting
-    #print(player.inventory) # just for analytical reasons
+            print(f"{item.name} with health bonus {round(item.health_bonus,2)}") 
 
 
 def main():
@@ -327,14 +326,20 @@ def main():
                 player = monster_battle(player, dmg_multiplier)
             elif scenario == 2:
                 item_in_chest(player)
-                if len(player.inventory) > 2:
+                if len(player.inventory) > 3:
                     try:
                         print("""
                               Your inventory is full! Pick something to exchange!
                               """)
                         show_inventory(player)
                         remove_index = int(input("Remove index: "))
-                        index = player.inventory[remove_index+1]
+                        index = player.inventory[remove_index-1]
+                        print(index) # index == <__main__.Item object at (code)> which means you cant use it with Item()
+                        # item = Item(index)
+                        # if item.Attribute == "Strength bonus":
+                        #     player.strength -= item.strength_bonus
+                        # else:
+                        #     player.hp -= item.health_bonus
                         player.inventory.remove(index)
                     except:
                         print(""""
@@ -343,8 +348,14 @@ def main():
                               """)
                         print("Your inventory is full! Pick something to exchange!")
                         show_inventory(player)
-                        remove_index = int(input("Remove index: "))
+                        remove_index = int(input("Remove index: ")) # or: stat... -= stat of weapon, item.health_bonus/item.strength_bonus
                         index = player.inventory[remove_index-1]
+                        print(index)
+                        # item = Item(index)
+                        # if item.Attribute == "Strength bonus":
+                        #     player.strength -= item.strength_bonus
+                        # else:
+                        #     player.hp -= item.health_bonus
                         player.inventory.remove(index)
             elif scenario == 3:
                 trap(player)
