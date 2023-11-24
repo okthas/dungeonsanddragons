@@ -187,19 +187,36 @@ class Item:
 
 class Monster:
     def __init__(self, player):
-        a = rand.randint(0,50)
+        self.Attribute = 0
+        a = rand.randint(0,80)
         if a == 4:
             self.type = "Charizard"
             self.monster_strength = 45 + player.level*5
             self.monster_hp = 60 + player.level*6
+        elif a == 2:
+            if player.level > 10:
+                self.type = "Nothing?"
+                self.monster_strength = 0
+                self.monster_hp = 0
+            else: 
+                self.Attribute = "Last boss"
+                self.type = "Wait... Is that?"
+                self.monster_strength = 99 + player.level*7
+                self.monster_hp = 99 + player.level*7
         else:
-            self.type = rand.choice(["Golem", "Goblin", "Dragon"])
+            self.type = rand.choice(["Golem", "Goblin", "Dragon", "Rat", "Slime"])
             if self.type == "Golem":
                 self.monster_strength = 12 + player.level*2.9
                 self.monster_hp = 14 + player.level*3.7
             elif self.type == "Goblin":
                 self.monster_strength = 4 + player.level*1.9
                 self.monster_hp = 5 + player.level*2.9
+            elif self.type == "Rat":
+                self.monster_strength = 3 + player.level*1.8
+                self.monster_hp = 2 + player.level*2
+            elif self.type == "Slime":
+                self.monster_strength = 1 + player.level*1.2
+                self.monster_hp = 7 + player.level*3
             elif self.type == "Dragon":
                 self.monster_strength = 33 + player.level*4.1
                 self.monster_hp = 35 + player.level*4.4
@@ -232,15 +249,21 @@ def monster_battle(player, dmg_multiplier):
                           """)
                     exit()
             if monster.monster_hp <= 0:
+                if monster.Attribute == "Last boss":
+                    """
+                        Congratulations! you beat the game!
+                        Thank you for playing!
+                    """
+                    exit()
                 xp = monster.experience_value
                 player.experience += xp
                 print(f"You have slain the {monster.type} and received {round(xp,2)} experience!")
                 while player.experience >= 24 + player.level**1.6:
                     player.experience -= 24 + player.level**1.6
                     player.level += 1
-                    player.hp += 1 + player.level**1.4
-                    player.hp_max += 1 + player.level**1.4
-                    player.strength += 1 + player.level**1.2
+                    player.hp += 1 + player.level**1.2
+                    player.hp_max += 1 + player.level**1.2
+                    player.strength += 1 + player.level**1.1
                     print(f"Your level has increased! You're now level {player.level}!")
         else:
             print("You fled!")
@@ -341,7 +364,7 @@ def main():
                                     player.strength -= item.strength_bonus
                                     #player.inventory.remove(index)
                                 else:
-                                    player.hp -= item.health_bonus
+                                    player.hp_max -= item.health_bonus
                                     #player.inventory.remove(index)
                             else: None
                         player.inventory.remove(index)
@@ -360,7 +383,7 @@ def main():
                                     player.strength -= item.strength_bonus
                                     #player.inventory.remove(index)
                                 else:
-                                    player.hp -= item.health_bonus
+                                    player.hp_max -= item.health_bonus
                                     #player.inventory.remove(index)
                             else: None
                         # print(index)
