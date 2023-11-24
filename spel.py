@@ -97,6 +97,7 @@ class Player:
     # for item in player.inventory
     #     if item == "Leather armor":
     #         self.health_bonus += 3 + player.level
+    #       /.../ rest of the items, will have to make it in test.py later
     #     else:
     #         self.health_bonus = self.health_bonus //////////
     # strength bonus, and health bonus total gets added to your stats aka: the bonus is stored in a different variable that only increases stats based on the total boost in your inventory
@@ -284,8 +285,8 @@ def show_inventory(player):
         try:
             print(f"{item.name} with strength bonus {round(item.strength_bonus,2)}")
         except:
-            print(f"{item.name} with health bonus {round(item.health_bonus,2)}") # it seems to show at random, which is annoying if u wanna know what weapon ur deleting
-    #print(player.inventory)
+            print(f"{item.name} with health bonus {round(item.health_bonus,2)}") # it seems to show at random, which is annoying if u wanna know what item ur deleting
+    #print(player.inventory) # just for analytical reasons
 
 
 def main():
@@ -326,7 +327,7 @@ def main():
                 player = monster_battle(player, dmg_multiplier)
             elif scenario == 2:
                 item_in_chest(player)
-                if len(player.inventory) > 4:
+                if len(player.inventory) > 2:
                     try:
                         print("""
                               Your inventory is full! Pick something to exchange!
@@ -342,8 +343,8 @@ def main():
                               """)
                         print("Your inventory is full! Pick something to exchange!")
                         show_inventory(player)
-                        remove_index = int(input("Remove index: "))-1
-                        index = player.inventory[remove_index]
+                        remove_index = int(input("Remove index: "))
+                        index = player.inventory[remove_index-1]
                         player.inventory.remove(index)
             elif scenario == 3:
                 trap(player)
