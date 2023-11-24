@@ -12,6 +12,7 @@ class Player:
 
 class Item:
     def __init__(self, player):
+        self.mimic = 0
         if player.level >= 7:
             x = 2    
             z = rand.randint(0,33)
@@ -25,7 +26,7 @@ class Item:
             x = 1
         else: 
             x = 0
-        self.name = rand.choice(["Sword", "Shield", "Bow", "Armor", "J", "J", "J"])
+        self.name = rand.choice(["Sword", "Shield", "Bow", "Armor", "J", "J", "J", "Armor Mimic", "Weapon Mimic"])
         if self.name == "Armor":
             self.Attribute = "Health bonus"
             level = rand.randint(0,x)
@@ -92,11 +93,26 @@ class Item:
             elif level == 2:
                 self.name = f"Enchanted bow ({player.level})"
                 self.strength_bonus = 3.1*player.level
-                player.strength += self.strength_bonus
+                player.strength += self.strength_bonus 
+        elif self.name == "Armor Mimic":
+            self.Attribute = "Health bonus"
+            self.mimic = 1
+            monster_battle(player, dmg_multiplier)
+        elif self.name == "Weapon Mimic":
+            self.Attribute = "Strength bonus"
+            self.mimic = 1
+            monster_battle(player, dmg_multiplier)
+            # Potentially add mimic chest
 
 class Monster:
     def __init__(self, player):
         self.Attribute = 0
+        item = Item(player)
+        if item.mimic == 1:
+            self.type = "Mimic"
+            self.monster_strength = 30 + player.level*2.3
+            self.monster_hp = 25 + player.level*1.7
+            return None
         a = rand.randint(0,50)
         if a == 4:
             self.type = "Charizard"
@@ -185,6 +201,36 @@ STR: {round(player.strength,2)} -> {round(player.strength+1+player.level*0.7+0.7
                     player.level += 1
                     player.hp_max += 1 + player.level
                     player.strength += 1 + player.level*0.7
+                if monster.type == "Mimic":
+                    item = Item(player)
+                    if item.name == "Weapon mimic":
+                        b = rand.randint(0,2)
+                        if b == 0:
+                            item.name = f"Enchanted bow ({player.level})"
+                            item.strength_bonus = 3.1*player.level
+                            player.strength += item.strength_bonus
+                        elif b == 1:
+                            item.name = f"Diamond sword ({player.level})"
+                            item.strength_bonus = 11 + 1.4*player.level
+                            player.strength += item.strength_bonus
+                        elif b == 2:
+                            item.name = "Health potion"
+                            print("All you find is flesh and bone...")
+                    else:
+                        b = rand.randint(0,2)
+                        if b == 0:
+                            item.name = f"Diamond shield ({player.level})"
+                            item.health_bonus = 11 + 4*player.level
+                            player.hp_max += item.health_bonus
+                        elif b == 1:
+                            item.name = f"Diamond armor ({player.level})"
+                            item.health_bonus = 19 + 2.7*player.level
+                            player.hp_max += item.health_bonus
+                        elif b == 2:
+                            item.name = "Health potion"
+                            print("All you find is flesh and bone...")
+                    item_in_chest()
+
         else:
             print("You fled!")
             break
@@ -317,3 +363,5 @@ def main():
             print("Could not execute command") # makes the code look badass B)
 main()
 #x, y and z are just throwaway variables used for randomizing choices, aka: chance
+
+# im gonna pick this up tomorrow...
