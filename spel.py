@@ -8,7 +8,98 @@ class Player:
         self.strength = 5
         self.inventory = []
         self.experience = 0
-
+# class Item:
+#     def __init__(self, player):
+#         if player.level >= 7:
+#             x = 2    
+#             z = rand.randint(0,100)
+#             if z == 3:
+#                 self.Attribute = "Strength bonus"
+#                 self.name = f"Excalibur ({player.level})"
+#                 self.strength_bonus = 15 + player.level**1.6
+#                 player.strength += self.strength_bonus   
+#                 return None   
+#         elif player.level >= 5:
+#             x = 1
+#         else: 
+#             x = 0
+#         self.name = rand.choice(["Sword", "Shield", "Bow", "Armor", "J", "J", "J"])
+#         if self.name == "Armor":
+#             self.Attribute = "Health bonus"
+#             level = rand.randint(0,x)
+#             if level == 0:
+#                 self.name = f"Leather armor ({player.level})"
+#                 self.health_bonus = 3 + player.level 
+#                 player.hp_max += self.health_bonus
+#             elif level == 1:
+#                 self.name = f"Iron armor ({player.level})"
+#                 self.health_bonus = 7 + 1.4*player.level
+#                 player.hp_max += self.health_bonus
+#             elif level == 2:
+#                 self.name = f"Diamond armor ({player.level})"
+#                 self.health_bonus = 15 + 2*player.level
+#                 player.hp_max += self.health_bonus
+#         elif self.name == "Shield":
+#             self.Attribute = "Health bonus"
+#             level = rand.randint(0,x)
+#             if level == 0:
+#                 self.name = f"Wooden shield ({player.level})"
+#                 self.health_bonus = 3 + player.level
+#                 player.hp_max += self.health_bonus
+#             elif level == 1:
+#                 self.name = f"Iron shield ({player.level})"
+#                 self.health_bonus = 7 + 1.4*player.level
+#                 player.hp_max += self.health_bonus
+#             elif level == 2:
+#                 self.name = f"Diamond shield ({player.level})"
+#                 self.health_bonus = 15 + 2*player.level
+#                 player.hp_max += self.health_bonus
+#         elif self.name == "J":
+#             self.name = "Health potion"
+#             self.Attribute = "Health potion"
+#             self.health_bonus = 3.7 + player.level*2.5
+#             player.hp += self.health_bonus
+#             if player.hp > player.hp_max:
+#                 player.hp = player.hp_max
+#         elif self.name == "Sword":
+#             self.Attribute = "Strength bonus"
+#             level = rand.randint(0,x)
+#             if level == 0:
+#                 self.name = f"Wooden sword ({player.level})"
+#                 self.strength_bonus = 3 + player.level
+#                 player.strength += self.strength_bonus
+#             elif level == 1:
+#                 self.name = f"Iron sword ({player.level})"
+#                 self.strength_bonus = 7 + 1.4*player.level
+#                 player.strength += self.strength_bonus
+#             elif level == 2:
+#                 self.name = f"Diamond sword ({player.level})"
+#                 self.strength_bonus = 15 + 2*player.level
+#                 player.strength += self.strength_bonus
+#         elif self.name == "Bow":
+#             self.Attribute = "Strength bonus"
+#             level = rand.randint(0,x)
+#             if level == 0:
+#                 self.name = f"Wooden bow ({player.level})"
+#                 self.strength_bonus = 3 + player.level
+#                 player.strength += self.strength_bonus
+#             elif level == 1:
+#                 self.name = f"Compound bow ({player.level})"
+#                 self.strength_bonus = 7 + 1.4*player.level
+#                 player.strength += self.strength_bonus
+#             elif level == 2:
+#                 self.name = f"Enchanted bow ({player.level})"
+#                 self.strength_bonus = 15 + 2*player.level
+#                 player.strength += self.strength_bonus
+# 
+# only if [item] is in player.inventory
+# if self.Attribute == "Health bonus":
+    # for item in player.inventory
+    #     if item == "Leather armor":
+    #         self.health_bonus = 3 + player.level
+    #         player.hp_max += self.health_bonus
+    #     else:
+    #         self.health_bonus = self.health_bonus
 class Item:
     def __init__(self, player):
         if player.level >= 7:
@@ -30,7 +121,7 @@ class Item:
             level = rand.randint(0,x)
             if level == 0:
                 self.name = f"Leather armor ({player.level})"
-                self.health_bonus = 3 + player.level # only if [item] is in player.inventory
+                self.health_bonus = 3 + player.level 
                 player.hp_max += self.health_bonus
             elif level == 1:
                 self.name = f"Iron armor ({player.level})"
@@ -95,7 +186,7 @@ class Item:
 
 class Monster:
     def __init__(self, player):
-        a = rand.randint(0,5)
+        a = rand.randint(0,50)
         if a == 4:
             self.type = "Charizard"
             self.monster_strength = 45 + player.level*5
@@ -194,6 +285,7 @@ def show_inventory(player):
             print(f"{item.name} with strength bonus {round(item.strength_bonus,2)}")
         except:
             print(f"{item.name} with health bonus {round(item.health_bonus,2)}") # it seems to show at random, which is annoying if u wanna know what weapon ur deleting
+    #print(player.inventory)
 
 
 def main():
