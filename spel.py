@@ -10,9 +10,44 @@ class Player:
         self.inventory = []
         self.experience = 0
 
+class Item_mimic:
+    def __init__(self, player):
+        self.name = rand.choice(["Weapon mimic", 0])
+        if self.name == "Weapon mimic":
+            b = rand.randint(0,5)
+            if b == 0:
+                self.Attribute = "Strength bonus"
+                self.name = f"Enchanted bow ({player.level})"
+                self.strength_bonus = 3.1*player.level
+                player.strength += self.strength_bonus
+            elif b == 1:
+                self.Attribute = "Strength bonus"
+                self.name = f"Diamond sword ({player.level})"
+                self.strength_bonus = 11 + 1.4*player.level
+                player.strength += self.strength_bonus
+            else:
+                self.Attribute = "None"
+                self.name = "None"
+                print("The mimic wasn't holding onto anything...")
+        else:
+            b = rand.randint(0,5)
+            if b == 0:  
+                self.Attribute = "Health bonus"
+                self.name = f"Diamond shield ({player.level})"
+                self.health_bonus = 11 + 4*player.level
+                player.hp_max += self.health_bonus
+            elif b == 1:
+                self.Attribute = "Health bonus"
+                self.name = f"Diamond armor ({player.level})"
+                self.health_bonus = 19 + 2.7*player.level
+                player.hp_max += self.health_bonus
+            else:
+                self.Attribute = "None"
+                self.name = "None"
+                print("The mimic wasn't holding onto anything...")
+
 class Item:
     def __init__(self, player):
-        self.mimic = 0
         if player.level >= 7:
             x = 2    
             z = rand.randint(0,33)
@@ -26,7 +61,9 @@ class Item:
             x = 1
         else: 
             x = 0
-        self.name = rand.choice(["Sword", "Shield", "Bow", "Armor", "J", "J", "J", "Armor Mimic", "Weapon Mimic"])
+        self.name = rand.choice(["Sword", "Shield", "Bow", "Armor", "J", "J", "J", "J"])
+        if player.hp == player.hp_max:
+            self.name = rand.choice(["Sword", "Shield", "Bow", "Armor"])
         if self.name == "Armor":
             self.Attribute = "Health bonus"
             level = rand.randint(0,x)
@@ -84,35 +121,22 @@ class Item:
             level = rand.randint(0,x)
             if level == 0:
                 self.name = f"Wooden bow ({player.level})"
-                self.strength_bonus = 1.9*player.level
+                self.strength_bonus = 1.5*player.level
                 player.strength += self.strength_bonus
             elif level == 1:
                 self.name = f"Compound bow ({player.level})"
-                self.strength_bonus = 2.4*player.level
+                self.strength_bonus = 2.2*player.level
                 player.strength += self.strength_bonus
             elif level == 2:
                 self.name = f"Enchanted bow ({player.level})"
-                self.strength_bonus = 3.1*player.level
+                self.strength_bonus = 2.9*player.level
                 player.strength += self.strength_bonus 
-        elif self.name == "Armor Mimic":
-            self.Attribute = "Health bonus"
-            self.mimic = 1
-            monster_battle(player, dmg_multiplier)
-        elif self.name == "Weapon Mimic":
-            self.Attribute = "Strength bonus"
-            self.mimic = 1
-            monster_battle(player, dmg_multiplier)
+    
             # Potentially add mimic chest
 
 class Monster:
     def __init__(self, player):
         self.Attribute = 0
-        item = Item(player)
-        if item.mimic == 1:
-            self.type = "Mimic"
-            self.monster_strength = 30 + player.level*2.3
-            self.monster_hp = 25 + player.level*1.7
-            return None
         a = rand.randint(0,50)
         if a == 4:
             self.type = "Charizard"
@@ -128,6 +152,12 @@ class Monster:
                 self.type = "Wait... Is that?"
                 self.monster_strength = 99 + player.level*5
                 self.monster_hp = 99 + player.level*5
+        elif a == 1:
+            self.type = "Mimic"
+            self.monster_strength = 0 + player.level*2.3
+            self.monster_hp = 0 + player.level*1.7
+            self.experience_x = self.monster_strength + self.monster_hp
+            self.experience_value = self.experience_x*0.5
         else:
             self.type = rand.choice(["Golem", "Goblin", "Dragon", "Rat", "Slime"])
             if self.type == "Golem":
@@ -167,7 +197,7 @@ def monster_battle(player, dmg_multiplier):
             while monster.monster_hp > 0:
                 monster.monster_hp -= player.strength
                 if monster.monster_hp <= 0:
-                    player.hp -= 5*monster.monster_strength/player.hp_max
+                    player.hp -= 4/dmg_multiplier*monster.monster_strength/player.hp_max
                     break
                 player.hp -= monster.monster_strength/dmg_multiplier
             if player.hp <= 0:
@@ -194,42 +224,17 @@ def monster_battle(player, dmg_multiplier):
                     print(f"""
           Your level has increased!
 Level: {player.level} -> {player.level+1}
-Max HP: {round(player.hp_max,2)} -> {round(player.hp_max+1+player.level+1,2)}
-STR: {round(player.strength,2)} -> {round(player.strength+1+player.level*0.7+0.7,2)}
+Max HP: {round(player.hp_max,2)} -> {round(player.hp_max+1,2)}
+STR: {round(player.strength,2)} -> {round(player.strength+1,2)}
                           """)
                     player.experience -= 24 + player.level**1.9
                     player.level += 1
-                    player.hp_max += 1 + player.level
-                    player.strength += 1 + player.level*0.7
+                    player.hp_max += 1
+                    player.strength += 1 
                 if monster.type == "Mimic":
-                    item = Item(player)
-                    if item.name == "Weapon mimic":
-                        b = rand.randint(0,2)
-                        if b == 0:
-                            item.name = f"Enchanted bow ({player.level})"
-                            item.strength_bonus = 3.1*player.level
-                            player.strength += item.strength_bonus
-                        elif b == 1:
-                            item.name = f"Diamond sword ({player.level})"
-                            item.strength_bonus = 11 + 1.4*player.level
-                            player.strength += item.strength_bonus
-                        elif b == 2:
-                            item.name = "Health potion"
-                            print("All you find is flesh and bone...")
-                    else:
-                        b = rand.randint(0,2)
-                        if b == 0:
-                            item.name = f"Diamond shield ({player.level})"
-                            item.health_bonus = 11 + 4*player.level
-                            player.hp_max += item.health_bonus
-                        elif b == 1:
-                            item.name = f"Diamond armor ({player.level})"
-                            item.health_bonus = 19 + 2.7*player.level
-                            player.hp_max += item.health_bonus
-                        elif b == 2:
-                            item.name = "Health potion"
-                            print("All you find is flesh and bone...")
-                    item_in_chest()
+                    item_in_mimic_chest(player)
+                    
+                
 
         else:
             print("You fled!")
@@ -256,6 +261,16 @@ def display_stats(player):
     print(f"Level: {player.level}")
     print(f"Strength: {round(player.strength,2)}")
     print(f"HP: {round(player.hp,2)}/{round(player.hp_max,2)}")
+
+def item_in_mimic_chest(player):
+    item_mimic = Item_mimic(player)
+    if item_mimic.name == "None":
+        return None
+    player.inventory.append(item_mimic)
+    if item_mimic.Attribute == "Strength bonus":
+        print(f"You have received a new weapon: {item_mimic.name}!")
+    else:
+        print(f"You have received a new defensive item: {item_mimic.name}!")
 
 def item_in_chest(player):
     item = Item(player)
@@ -295,6 +310,7 @@ def main():
     else:
         dmg_multiplier = float(dmg_multiplier) # lower the multiplier, higher the damage you take!
     player.name = input("What's your name? ")
+    print(f"Welcome, {player.name}!")
     while player.hp > 0:        
         print(
                 """
@@ -312,6 +328,43 @@ def main():
             scenario = rand.randint(1, 3)
             if scenario == 1:
                 player = monster_battle(player, dmg_multiplier)
+                if len(player.inventory) > 3:
+                    try:
+                        print("""
+                              Your inventory is full! Pick something to exchange!
+                              """)
+                        show_inventory(player)
+                        remove_index = int(input("Remove index: "))
+                        index = player.inventory[remove_index-1]
+                        for item in player.inventory:
+                            if item == player.inventory[remove_index-1]:
+                                if item.Attribute == "Strength bonus":
+                                    player.strength -= item.strength_bonus
+                                else:
+                                    player.hp_max -= item.health_bonus
+                            else: None
+                        player.inventory.remove(index)
+                        if player.hp > player.hp_max:
+                            player.hp = player.hp_max
+                    except:
+                        print(""""
+                              Choose an index within list range!
+                              
+                              """)
+                        print("Your inventory is full! Pick something to exchange!")
+                        show_inventory(player)
+                        remove_index = int(input("Remove index: "))
+                        index = player.inventory[remove_index-1]
+                        for item in player.inventory:
+                            if item == player.inventory[remove_index-1]:
+                                if item.Attribute == "Strength bonus":
+                                    player.strength -= item.strength_bonus
+                                else:
+                                    player.hp_max -= item.health_bonus
+                            else: None
+                        player.inventory.remove(index)
+                        if player.hp > player.hp_max:
+                            player.hp = player.hp_max
             elif scenario == 2:
                 item_in_chest(player)
                 if len(player.inventory) > 3:
