@@ -66,7 +66,7 @@ class Item:
                 self.strength_bonus = 15 + player.level**1.6
                 player.strength += self.strength_bonus   # when youre level 7 or higher theres a 1% chance to get excalibur
                 return None   
-        elif player.level >= 5:
+        elif player.level >= 4:
             x = 1
         else: 
             x = 0
@@ -108,7 +108,7 @@ class Item:
         elif self.name == "J":
             self.name = "Health potion"
             self.Attribute = "Health potion"
-            self.health_bonus = 3.7 + player.level*2.5
+            self.health_bonus = 3.4 + player.level*2
             player.hp += self.health_bonus
             if player.hp > player.hp_max:
                 player.hp = player.hp_max
@@ -212,7 +212,7 @@ def monster_battle(player, dmg_multiplier, trap_multiplier):
             while monster.monster_hp > 0:
                 monster.monster_hp -= player.strength
                 if monster.monster_hp <= 0:
-                    player.hp -= 10/dmg_multiplier*monster.monster_strength/player.hp_max
+                    player.hp -= 2*player.level/dmg_multiplier*monster.monster_strength/player.hp_max
                     break
                 player.hp -= monster.monster_strength/dmg_multiplier
             if player.hp <= 0:
@@ -318,10 +318,10 @@ def item_in_mimic_chest(player):
     player.inventory.append(item_mimic)
     if item_mimic.Attribute == "Strength bonus":
         print()
-        print(f"You have received a new weapon: {item_mimic.name}!")
+        print(f"You found a new weapon in the mimic: {item_mimic.name}!")
     else:
         print()
-        print(f"You have received a new defensive item: {item_mimic.name}!")
+        print(f"You found a new defensive item in the mimic: {item_mimic.name}!")
 
 def item_in_chest(player):
     item = Item(player)
@@ -333,13 +333,10 @@ def item_in_chest(player):
     else:
         player.inventory.append(item)
     if item.Attribute == "Strength bonus":
-        print()
         print(f"You found a new weapon: {item.name} in the chest!")
     elif item.Attribute == "Health potion":
-        print()
         print(f"You found a health potion in the chest!")
     else:
-        print()
         print(f"You found a defensive item: {item.name} in the chest!")
 
 def show_inventory(player):
