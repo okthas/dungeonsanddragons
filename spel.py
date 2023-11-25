@@ -14,7 +14,7 @@ class Item_mimic:
     def __init__(self, player):
         self.name = rand.choice(["Weapon mimic", 0])
         if self.name == "Weapon mimic":
-            b = rand.randint(0,5)
+            b = rand.randint(0,2)
             if b == 0:
                 self.Attribute = "Strength bonus"
                 self.name = f"Enchanted bow ({player.level})"
@@ -29,8 +29,17 @@ class Item_mimic:
                 self.Attribute = "None"
                 self.name = "None"
                 print("The mimic wasn't holding onto anything...")
+                x = rand.randint(0,50)
+                if x == 1:
+                    print("""
+                            Wait a second...
+                            What is that light?
+                          """)
+                    print("""
+                            Oh... It's nothing
+""")
         else:
-            b = rand.randint(0,5)
+            b = rand.randint(0,2)
             if b == 0:  
                 self.Attribute = "Health bonus"
                 self.name = f"Diamond shield ({player.level})"
@@ -64,6 +73,8 @@ class Item:
         self.name = rand.choice(["Sword", "Shield", "Bow", "Armor", "J", "J", "J", "J"])
         if player.hp == player.hp_max:
             self.name = rand.choice(["Sword", "Shield", "Bow", "Armor"])
+        if player.hp < player.hp_max*0.35:
+            self.name = rand.choice(["Sword", "Shield", "Bow", "Armor", "J", "J", "J", "J", "J", "J", "J"])
         if self.name == "Armor":
             self.Attribute = "Health bonus"
             level = rand.randint(0,x)
@@ -138,11 +149,7 @@ class Monster:
     def __init__(self, player):
         self.Attribute = 0
         a = rand.randint(0,50)
-        if a == 4:
-            self.type = "Charizard"
-            self.monster_strength = 45 + player.level*3
-            self.monster_hp = 60 + player.level*4
-        elif a == 2:
+        if a == 2:
             if player.level < 10:
                 self.type = "Nothing?"
                 self.monster_strength = 0
@@ -152,12 +159,10 @@ class Monster:
                 self.type = "Wait... Is that?"
                 self.monster_strength = 99 + player.level*5
                 self.monster_hp = 99 + player.level*5
-        elif a == 1:
+        elif a == 1 or a == 21:
             self.type = "Mimic"
-            self.monster_strength = 0 + player.level*2.3
-            self.monster_hp = 0 + player.level*1.7
-            self.experience_x = self.monster_strength + self.monster_hp
-            self.experience_value = self.experience_x*0.5
+            self.monster_strength = 30 + player.level*2.3
+            self.monster_hp = 25 + player.level*1.7
         else:
             self.type = rand.choice(["Golem", "Goblin", "Dragon", "Rat", "Slime"])
             if self.type == "Golem":
@@ -178,18 +183,27 @@ class Monster:
         self.experience_x = self.monster_strength + self.monster_hp
         self.experience_value = self.experience_x*0.5
 
-def monster_battle(player, dmg_multiplier):
+def monster_battle(player, dmg_multiplier, trap_multiplier):
     monster = Monster(player)
-    print(f"""
-            You have encountered a {monster.type}!
-            Monster hp: {round(monster.monster_hp,2)}   
-            Monster strength: {round(monster.monster_strength,2)}
+    if monster.type == "Nothing?":
+        print(f"""
+                You have encountered... Nothing?
+                Monster hp: {round(monster.monster_hp,2)}   
+                Monster strength: {round(monster.monster_strength,2)}
+
+            """)
+    else:
+        print(f"""
+                You have encountered a {monster.type}!
+                Monster hp: {round(monster.monster_hp,2)}   
+                Monster strength: {round(monster.monster_strength,2)}
 
             """)
     while monster.monster_hp > 0:
         print(f"""
-            1. Attack
-            2. Flee
+                
+                1. Attack
+                2. Flee
 
         """)
         choose = input("Attack or flee?  ")
@@ -202,35 +216,54 @@ def monster_battle(player, dmg_multiplier):
                 player.hp -= monster.monster_strength/dmg_multiplier
             if player.hp <= 0:
                     print("""
+                          
                           You died
+                          
                           """)
                     exit()
             if monster.monster_hp <= 0:
                 if monster.Attribute == "Last boss":
-                    choice = input(f"""
-                        Congratulations! you beat the game!
-                        {player.name}, Thank you for playing!
+                    print("""
 
-                        Do you wish to keep playing?
 
-                            1. Yes
-                    """)
-                    if choice != "1":
-                        exit()
+
+
+
+                                                    I
+                                                    I
+                                                    I    
+                                                    I
+                                                    I
+                                                    I
+____________________________________________________I """)
+                    input("Which door should I choose... ")
+                    print("""
+                                
+                            I hear someone... 
+                          
+                            What are they saying?
+
+                          """)
+                    exit()
                 xp = monster.experience_value
                 player.experience += xp
+                trap_multiplier += 1
                 print(f"You have slain the {monster.type} and received {round(xp,2)} experience!")
                 while player.experience >= 24 + player.level**1.9:
                     print(f"""
-          Your level has increased!
+___________________________________________________
+
+        Your level has increased!
 Level: {player.level} -> {player.level+1}
-Max HP: {round(player.hp_max,2)} -> {round(player.hp_max+1,2)}
-STR: {round(player.strength,2)} -> {round(player.strength+1,2)}
-                          """)
+Max HP: {round(player.hp_max,2)} -> {round(player.hp_max+1+0.7*player.level+0.7,2)}
+STR: {round(player.strength,2)} -> {round(player.strength+1+0.4*player.level+0.4,2)}                         
+
+___________________________________________________
+""")
                     player.experience -= 24 + player.level**1.9
                     player.level += 1
-                    player.hp_max += 1
-                    player.strength += 1 
+                    player.hp_max += 1 + 0.7*player.level
+                    player.strength += 1  + 0.4*player.level
                 if monster.type == "Mimic":
                     item_in_mimic_chest(player)
                     
@@ -242,20 +275,35 @@ STR: {round(player.strength,2)} -> {round(player.strength+1,2)}
 
     return player
 
-def trap(player):
-    y = rand.randint(0,1)
+def trap(player, dmg_multiplier, trap_multiplier):
+    print("""
+                A trap!
+          """)
+    y = rand.randint(0,trap_multiplier+1)
     if y == 0:
-        trap_damage = 0.5*rand.randint(0, 2) + 0.6*player.level
+        trap_damage = 0.5/dmg_multiplier*rand.randint(0, 2) + 0.6*player.level
         player.hp -= trap_damage
-        print(f"You have been caught in a trap and lost {round(trap_damage,2)} HP!")
+        print(f"You have been caught in the trap and lost {round(trap_damage,2)} HP!")
     else:
         print("You managed to dodge the trap!")
+        trap_multiplier -= 1
     if player.hp <= 0:
         print("""
-              You died
+                            
+                            You died
+              
               """)
 
-def display_stats(player):
+def display_stats(player, dmg_multiplier):
+    print()
+    if dmg_multiplier == 1:
+        print("Difficulty: Hard")
+    elif dmg_multiplier == 1.5:
+        print("Difficulty: Medium")
+    elif dmg_multiplier == 3:
+        print("Difficulty: Easy")
+    else:
+        print(f"Difficulty: Custom({dmg_multiplier})")
     print(f"Name: {player.name}")
     print(f"Experience: {round(player.experience,2)}/{round(24 + player.level**1.9,2)}")
     print(f"Level: {player.level}")
@@ -268,30 +316,41 @@ def item_in_mimic_chest(player):
         return None
     player.inventory.append(item_mimic)
     if item_mimic.Attribute == "Strength bonus":
+        print()
         print(f"You have received a new weapon: {item_mimic.name}!")
     else:
+        print()
         print(f"You have received a new defensive item: {item_mimic.name}!")
 
 def item_in_chest(player):
     item = Item(player)
+    print("""
+                A chest!
+""")
     if item.Attribute == "Health potion":
         None
     else:
         player.inventory.append(item)
     if item.Attribute == "Strength bonus":
-        print(f"You have received a new weapon: {item.name}!")
+        print()
+        print(f"You found a new weapon: {item.name} in the chest!")
+    elif item.Attribute == "Health potion":
+        print()
+        print(f"You found a health potion in the chest!")
     else:
-        print(f"You have received a new defensive item: {item.name}!")
+        print()
+        print(f"You found a defensive item: {item.name} in the chest!")
 
 def show_inventory(player):
     for item in player.inventory:
         try:
-            print(f"{item.name} with strength bonus {round(item.strength_bonus,2)}")
+            print(f"{item.name} with strength bonus {round(item.strength_bonus,2)}!")
         except:
-            print(f"{item.name} with health bonus {round(item.health_bonus,2)}") 
+            print(f"{item.name} with health bonus {round(item.health_bonus,2)}!") 
 
 
 def main():
+    trap_multiplier = 0
     player = Player()
     dmg_multiplier = input("""
                 Choose difficulty:
@@ -309,8 +368,14 @@ def main():
         dmg_multiplier = 1
     else:
         dmg_multiplier = float(dmg_multiplier) # lower the multiplier, higher the damage you take!
-    player.name = input("What's your name? ")
-    print(f"Welcome, {player.name}!")
+    player.name = input("""
+                
+                What's your name? 
+""")
+    if player.name == "Marie":
+        print("""
+Wait... I think I've heard this name somewhere before
+""")
     while player.hp > 0:        
         print(
                 """
@@ -322,16 +387,49 @@ def main():
                 
                 """)
             
-        choice = input("What do you want to do? ")
+        choice = input("What should I do? ")
 
         if choice == "1":
+            x = 1
+            while x == 1:
+                try:
+                    print("""
+                                    
+
+
+        1:              2:              3:
+     _________       _________       _________      
+    I         I     I         I     I         I     I
+    I         I     I         I     I         I     I
+    I         I     I         I     I         I     I
+    I O       I     I O       I     I O       I     I
+    I         I     I         I     I         I     I
+    I         I     I         I     I         I     I
+____________________________________________________I """)
+                    choice2 = int(input("Which door should I choose... "))
+                    if choice2 != 1 and choice2 != 2 and choice2 != 3:
+                        if choice2%2 == 0:
+                            print("""
+That door isn't here... is it?
+""")
+                        else:
+                            print("""
+...
+""")
+                        continue
+                    x = 0
+                except:
+                    print("""
+That's not even a number... Let's go through this one...
+""")
+                    x = 0
             scenario = rand.randint(1, 3)
             if scenario == 1:
-                player = monster_battle(player, dmg_multiplier)
+                player = monster_battle(player, dmg_multiplier, trap_multiplier)
                 if len(player.inventory) > 3:
                     try:
                         print("""
-                              Your inventory is full! Pick something to exchange!
+                              My backpack is getting heavy, I need to get rid of something...
                               """)
                         show_inventory(player)
                         remove_index = int(input("Remove index: "))
@@ -348,10 +446,10 @@ def main():
                             player.hp = player.hp_max
                     except:
                         print(""""
-                              Choose an index within list range!
+                              I can't find it...
                               
                               """)
-                        print("Your inventory is full! Pick something to exchange!")
+                        print("My backpack is getting heavy, I need to get rid of something...")
                         show_inventory(player)
                         remove_index = int(input("Remove index: "))
                         index = player.inventory[remove_index-1]
@@ -370,7 +468,7 @@ def main():
                 if len(player.inventory) > 3:
                     try:
                         print("""
-                              Your inventory is full! Pick something to exchange!
+                              My backpack is getting heavy, I need to get rid of something...
                               """)
                         show_inventory(player)
                         remove_index = int(input("Remove index: "))
@@ -387,10 +485,10 @@ def main():
                             player.hp = player.hp_max
                     except:
                         print(""""
-                              Choose an index within list range!
+                              I can't find it...
                               
                               """)
-                        print("Your inventory is full! Pick something to exchange!")
+                        print("My backpack is getting heavy, I need to get rid of something...")
                         show_inventory(player)
                         remove_index = int(input("Remove index: "))
                         index = player.inventory[remove_index-1]
@@ -405,16 +503,15 @@ def main():
                         if player.hp > player.hp_max:
                             player.hp = player.hp_max
             elif scenario == 3:
-                trap(player)
+                trap(player, dmg_multiplier, trap_multiplier)
         elif choice == "2":
             show_inventory(player)
         elif choice == "3":
-            display_stats(player)
+            display_stats(player, dmg_multiplier)
         elif choice == "4":
             exit()
         else:
-            print("Could not execute command") # makes the code look badass B)
+            print("?")
 main()
-#x, y and z are just throwaway variables used for randomizing choices, aka: chance
 
-# im gonna pick this up tomorrow...
+#x, y, z, a, b, etc are just throwaway variables used for randomizing choices, aka: chance
