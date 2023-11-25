@@ -29,7 +29,7 @@ class Item_mimic:
                 self.Attribute = "None"
                 self.name = "None"
                 print("The mimic wasn't holding onto anything...")
-                x = rand.randint(0,50)
+                x = rand.randint(0,10)
                 if x == 1:
                     print("""
                             Wait a second...
@@ -70,7 +70,7 @@ class Item:
             x = 1
         else: 
             x = 0
-        self.name = rand.choice(["Sword", "Shield", "Bow", "Armor", "J", "J", "J", "J"])
+        self.name = rand.choice(["Sword", "Shield", "Bow", "Armor", "J", "J", "J"])
         if player.hp == player.hp_max:
             self.name = rand.choice(["Sword", "Shield", "Bow", "Armor"])
         if player.hp < player.hp_max*0.35:
@@ -148,7 +148,8 @@ class Item:
 class Monster:
     def __init__(self, player):
         self.Attribute = 0
-        a = rand.randint(0,50)
+        a = rand.randint(0,round(300/player.level,0))
+        b = rand.randint(0,30)
         if a == 2:
             if player.level < 10:
                 self.type = "Nothing?"
@@ -157,9 +158,9 @@ class Monster:
             else: 
                 self.Attribute = "Last boss"
                 self.type = "Wait... Is that?"
-                self.monster_strength = 99 + player.level*5
-                self.monster_hp = 99 + player.level*5
-        elif a == 1 or a == 21:
+                self.monster_strength = 100
+                self.monster_hp = 100
+        elif b == 21:
             self.type = "Mimic"
             self.monster_strength = 30 + player.level*2.3
             self.monster_hp = 25 + player.level*1.7
@@ -185,9 +186,9 @@ class Monster:
 
 def monster_battle(player, dmg_multiplier, trap_multiplier):
     monster = Monster(player)
-    if monster.type == "Nothing?":
+    if monster.type == "Nothing?" or monster.type == "Wait... Is that?":
         print(f"""
-                You have encountered... Nothing?
+                You have encountered... {monster.type}?
                 Monster hp: {round(monster.monster_hp,2)}   
                 Monster strength: {round(monster.monster_strength,2)}
 
@@ -211,7 +212,7 @@ def monster_battle(player, dmg_multiplier, trap_multiplier):
             while monster.monster_hp > 0:
                 monster.monster_hp -= player.strength
                 if monster.monster_hp <= 0:
-                    player.hp -= 4/dmg_multiplier*monster.monster_strength/player.hp_max
+                    player.hp -= 10/dmg_multiplier*monster.monster_strength/player.hp_max
                     break
                 player.hp -= monster.monster_strength/dmg_multiplier
             if player.hp <= 0:
