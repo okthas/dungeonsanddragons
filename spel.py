@@ -238,7 +238,16 @@ def monster_battle(player, dmg_multiplier, trap_multiplier):
                                                     I
 ____________________________________________________I """)
                     input("Which door should I choose... ")
-                    print("""
+                    if player.name == "Marie":
+                        print("""
+                                
+                            Marie... 
+                          
+                            Wake up.
+
+                          """)
+                    else:
+                        print("""
                                 
                             I hear someone... 
                           
@@ -372,7 +381,7 @@ def main():
 """)
     if player.name == "Marie":
         print("""
-Wait... I think I've heard this name somewhere before
+That sounds... Familiar
 """)
     while player.hp > 0:        
         print(
@@ -424,71 +433,48 @@ That's not even a number... Let's go through this one...
             scenario = rand.randint(1, 3)
             if scenario == 1:
                 player = monster_battle(player, dmg_multiplier, trap_multiplier)
-                if len(player.inventory) > 3:
-                    try:
-                        print("""
-                              My backpack is getting heavy, I need to get rid of something...
-                              """)
-                        show_inventory(player)
-                        remove_index = int(input("Remove index: "))
-                        index = player.inventory[remove_index-1]
-                        for item in player.inventory:
-                            if item == player.inventory[remove_index-1]:
-                                if item.Attribute == "Strength bonus":
-                                    player.strength -= item.strength_bonus
-                                else:
-                                    player.hp_max -= item.health_bonus
-                            else: None
-                        player.inventory.remove(index)
-                        if player.hp > player.hp_max:
-                            player.hp = player.hp_max
-                    except:
+                while len(player.inventory) > 3:
+                    print("""
+                            My backpack is getting heavy, I need to get rid of something...
+                            """)
+                    show_inventory(player)
+                    remove_index = input("Remove index: ")
+                    if remove_index == "1" or remove_index == "2" or remove_index == "3" or remove_index == "4":
+                        remove_index = int(remove_index)
+                    else:
                         print(""""
-                              I can't find it...
-                              
-                              """)
-                        print("My backpack is getting heavy, I need to get rid of something...")
-                        show_inventory(player)
-                        remove_index = int(input("Remove index: "))
-                        index = player.inventory[remove_index-1]
-                        for item in player.inventory:
-                            if item == player.inventory[remove_index-1]:
-                                if item.Attribute == "Strength bonus":
-                                    player.strength -= item.strength_bonus
-                                else:
-                                    player.hp_max -= item.health_bonus
-                            else: None
-                        player.inventory.remove(index)
-                        if player.hp > player.hp_max:
-                            player.hp = player.hp_max
+                            I can't find it...
+                            
+                            """)
+                        continue
+                    index = player.inventory[remove_index-1]
+                    for item in player.inventory:
+                        if item == player.inventory[remove_index-1]:
+                            if item.Attribute == "Strength bonus":
+                                player.strength -= item.strength_bonus
+                            else:
+                                player.hp_max -= item.health_bonus
+                        else: None
+                    player.inventory.remove(index)
+                    if player.hp > player.hp_max:
+                        player.hp = player.hp_max
             elif scenario == 2:
                 item_in_chest(player)
                 if len(player.inventory) > 3:
-                    try:
+                    while len(player.inventory) > 3:
                         print("""
-                              My backpack is getting heavy, I need to get rid of something...
-                              """)
+                                My backpack is getting heavy, I need to get rid of something...
+                                """)
                         show_inventory(player)
-                        remove_index = int(input("Remove index: "))
-                        index = player.inventory[remove_index-1]
-                        for item in player.inventory:
-                            if item == player.inventory[remove_index-1]:
-                                if item.Attribute == "Strength bonus":
-                                    player.strength -= item.strength_bonus
-                                else:
-                                    player.hp_max -= item.health_bonus
-                            else: None
-                        player.inventory.remove(index)
-                        if player.hp > player.hp_max:
-                            player.hp = player.hp_max
-                    except:
-                        print(""""
-                              I can't find it...
-                              
-                              """)
-                        print("My backpack is getting heavy, I need to get rid of something...")
-                        show_inventory(player)
-                        remove_index = int(input("Remove index: "))
+                        remove_index = input("Remove index: ")
+                        if remove_index == "1" or remove_index == "2" or remove_index == "3" or remove_index == "4":
+                            remove_index = int(remove_index)
+                        else:
+                            print(""""
+                                I can't find it...
+                                
+                                """)
+                            continue
                         index = player.inventory[remove_index-1]
                         for item in player.inventory:
                             if item == player.inventory[remove_index-1]:
