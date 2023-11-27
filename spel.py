@@ -349,6 +349,9 @@ def item_in_chest(player):
         print(f"You found a defensive item: {item.name} in the chest!")
 
 def show_inventory(player):
+    if player.inventory == []:
+        "Nothing..."
+        return None
     for item in player.inventory:
         try:
             print(f"{item.name} with strength bonus {round(item.strength_bonus,2)}!")
