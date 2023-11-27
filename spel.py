@@ -1,22 +1,15 @@
 import random as rand
 import time
 import sys
+from Player import *
+from display_stats import *
+
 
 def delay_print(s):
     for c in s:
         sys.stdout.write(c)
         sys.stdout.flush()
         time.sleep(0.02)
-
-class Player:
-    def __init__(self):
-        self.name = 0
-        self.level = 1
-        self.hp = 10
-        self.hp_max = 10
-        self.strength = 5
-        self.inventory = []
-        self.experience = 0
 
 class Item_mimic:
     def __init__(self, player):
@@ -303,21 +296,7 @@ You managed to dodge the trap!""")
               
               """)
 
-def display_stats(player, dmg_multiplier):
-    print()
-    if dmg_multiplier == 1:
-        print("Difficulty: Hard")
-    elif dmg_multiplier == 1.5:
-        print("Difficulty: Medium")
-    elif dmg_multiplier == 3:
-        print("Difficulty: Easy")
-    else:
-        print(f"Difficulty: Custom({dmg_multiplier})")
-    print(f"Name: {player.name}")
-    print(f"Experience: {round(player.experience,2)}/{round(24 + player.level**1.9,2)}")
-    print(f"Level: {player.level}")
-    print(f"Strength: {round(player.strength,2)}")
-    print(f"HP: {round(player.hp,2)}/{round(player.hp_max,2)}")
+
 
 def item_in_mimic_chest(player):
     item_mimic = Item_mimic(player)
