@@ -1,4 +1,12 @@
 import random as rand
+import time
+import sys
+
+def delay_print(s):
+    for c in s:
+        sys.stdout.write(c)
+        sys.stdout.flush()
+        time.sleep(0.02)
 
 class Player:
     def __init__(self):
@@ -29,15 +37,6 @@ class Item_mimic:
                 self.Attribute = "None"
                 self.name = "None"
                 print("The mimic wasn't holding onto anything...")
-                x = rand.randint(0,10)
-                if x == 1:
-                    print("""
-                            Wait a second...
-                            What is that light?
-                          """)
-                    print("""
-                            Oh... It's nothing
-""")
         else:
             b = rand.randint(0,2)
             if b == 0:  
@@ -214,7 +213,7 @@ def monster_battle(player, dmg_multiplier, trap_multiplier):
                     break
                 player.hp -= monster.monster_strength/dmg_multiplier
             if player.hp <= 0:
-                    print("""
+                    delay_print("""
                           
                 You died
                           
@@ -237,7 +236,7 @@ def monster_battle(player, dmg_multiplier, trap_multiplier):
 ____________________________________________________I """)
                     input("Which door should I choose... ")
                     if player.name == "Marie":
-                        print("""
+                        delay_print("""
                                 
                             Marie... 
                           
@@ -245,7 +244,7 @@ ____________________________________________________I """)
 
                           """)
                     else:
-                        print("""
+                        delay_print("""
                                 
                             I hear someone... 
                           
@@ -284,19 +283,21 @@ ___________________________________________________
     return player
 
 def trap(player, dmg_multiplier, trap_multiplier):
-    print("""
+    delay_print("""
                 A trap!
           """)
     y = rand.randint(0,trap_multiplier+1)
     if y == 0:
         trap_damage = 0.5/dmg_multiplier*rand.randint(0, 2) + 0.6*player.level
         player.hp -= trap_damage
-        print(f"You have been caught in the trap and lost {round(trap_damage,2)} HP!")
+        print(f"""
+You have been caught in the trap and lost {round(trap_damage,2)} HP!""")
     else:
-        print("You managed to dodge the trap!")
+        print("""
+You managed to dodge the trap!""")
         trap_multiplier -= 1
     if player.hp <= 0:
-        print("""
+        delay_print("""
                             
                 You died
               
@@ -321,6 +322,15 @@ def display_stats(player, dmg_multiplier):
 def item_in_mimic_chest(player):
     item_mimic = Item_mimic(player)
     if item_mimic.name == "None":
+        x = rand.randint(0,10)
+        if x == 1:
+            delay_print("""
+                            Wait a second...
+                            What is that light?
+                          """)
+            delay_print("""
+                            Oh... It's nothing
+""")
         return None
     player.inventory.append(item_mimic)
     if item_mimic.Attribute == "Strength bonus":
@@ -332,9 +342,10 @@ def item_in_mimic_chest(player):
 
 def item_in_chest(player):
     item = Item(player)
-    print("""
+    delay_print("""
                 A chest!
-""")
+
+    """)
     if item.Attribute == "Health potion":
         None
     else:
@@ -348,7 +359,7 @@ def item_in_chest(player):
 
 def show_inventory(player):
     if player.inventory == []:
-        "Nothing..."
+        delay_print("Nothing...")
         return None
     for item in player.inventory:
         try:
@@ -381,7 +392,7 @@ def main():
                 What's your name? 
 """)
     if player.name == "Marie":
-        print("""
+        delay_print("""
 That sounds... Familiar
 """)
     while player.hp > 0:        
@@ -417,17 +428,17 @@ ____________________________________________________I """)
                     choice2 = int(input("Which door should I choose... "))
                     if choice2 != 1 and choice2 != 2 and choice2 != 3:
                         if choice2%2 == 0:
-                            print("""
+                            delay_print("""
 That door isn't here... is it?
 """)
                         else:
-                            print("""
+                            delay_print("""
 ...
 """)
                         continue
                     x = 0
                 except:
-                    print("""
+                    delay_print("""
 That's not even a number... Let's go through this one...
 """)
                     x = 0
@@ -435,7 +446,7 @@ That's not even a number... Let's go through this one...
             if scenario == 1:
                 player = monster_battle(player, dmg_multiplier, trap_multiplier)
                 while len(player.inventory) > 3:
-                    print("""
+                    delay_print("""
                             My backpack is getting heavy, I need to get rid of something...
                             """)
                     show_inventory(player)
@@ -443,7 +454,7 @@ That's not even a number... Let's go through this one...
                     if remove_index == "1" or remove_index == "2" or remove_index == "3" or remove_index == "4":
                         remove_index = int(remove_index)
                     else:
-                        print(""""
+                        delay_print(""""
                             I can't find it...
                             
                             """)
@@ -463,7 +474,7 @@ That's not even a number... Let's go through this one...
                 item_in_chest(player)
                 if len(player.inventory) > 3:
                     while len(player.inventory) > 3:
-                        print("""
+                        delay_print("""
                                 My backpack is getting heavy, I need to get rid of something...
                                 """)
                         show_inventory(player)
@@ -471,7 +482,7 @@ That's not even a number... Let's go through this one...
                         if remove_index == "1" or remove_index == "2" or remove_index == "3" or remove_index == "4":
                             remove_index = int(remove_index)
                         else:
-                            print(""""
+                            delay_print(""""
                                 I can't find it...
                                 
                                 """)
