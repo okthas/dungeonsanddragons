@@ -213,7 +213,7 @@ def monster_battle(player, dmg_multiplier, trap_multiplier):
                     break
                 player.hp -= monster.monster_strength/dmg_multiplier
             if player.hp <= 0:
-                    delay_print("""
+                    print("""
                           
                 You died
                           
@@ -283,7 +283,7 @@ ___________________________________________________
     return player
 
 def trap(player, dmg_multiplier, trap_multiplier):
-    delay_print("""
+    print("""
                 A trap!
           """)
     y = rand.randint(0,trap_multiplier+1)
@@ -342,7 +342,7 @@ def item_in_mimic_chest(player):
 
 def item_in_chest(player):
     item = Item(player)
-    delay_print("""
+    print("""
                 A chest!
 
     """)
@@ -359,7 +359,7 @@ def item_in_chest(player):
 
 def show_inventory(player):
     if player.inventory == []:
-        delay_print("Nothing...")
+        print("Nothing...")
         return None
     for item in player.inventory:
         try:
@@ -393,7 +393,7 @@ def main():
 """)
     if player.name == "Marie":
         delay_print("""
-That sounds... Familiar
+                            That sounds... Familiar
 """)
     while player.hp > 0:        
         print(
@@ -438,7 +438,7 @@ That door isn't here... is it?
                         continue
                     x = 0
                 except:
-                    delay_print("""
+                    print("""
 That's not even a number... Let's go through this one...
 """)
                     x = 0
@@ -446,7 +446,7 @@ That's not even a number... Let's go through this one...
             if scenario == 1:
                 player = monster_battle(player, dmg_multiplier, trap_multiplier)
                 while len(player.inventory) > 3:
-                    delay_print("""
+                    print("""
                             My backpack is getting heavy, I need to get rid of something...
                             """)
                     show_inventory(player)
@@ -454,7 +454,7 @@ That's not even a number... Let's go through this one...
                     if remove_index == "1" or remove_index == "2" or remove_index == "3" or remove_index == "4":
                         remove_index = int(remove_index)
                     else:
-                        delay_print(""""
+                        print(""""
                             I can't find it...
                             
                             """)
@@ -474,7 +474,7 @@ That's not even a number... Let's go through this one...
                 item_in_chest(player)
                 if len(player.inventory) > 3:
                     while len(player.inventory) > 3:
-                        delay_print("""
+                        print("""
                                 My backpack is getting heavy, I need to get rid of something...
                                 """)
                         show_inventory(player)
@@ -482,7 +482,7 @@ That's not even a number... Let's go through this one...
                         if remove_index == "1" or remove_index == "2" or remove_index == "3" or remove_index == "4":
                             remove_index = int(remove_index)
                         else:
-                            delay_print(""""
+                            print(""""
                                 I can't find it...
                                 
                                 """)
@@ -512,5 +512,4 @@ That's not even a number... Let's go through this one...
         else:
             print("?")
 main()
-
 #x, y, z, a, b, etc are just throwaway variables used for randomizing choices, aka: chance
