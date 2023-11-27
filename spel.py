@@ -142,8 +142,6 @@ class Item:
                 self.name = f"Enchanted bow ({player.level})"
                 self.strength_bonus = 2.9*player.level
                 player.strength += self.strength_bonus 
-    
-            # Potentially add mimic chest
 
 class Monster:
     def __init__(self, player):
@@ -218,7 +216,7 @@ def monster_battle(player, dmg_multiplier, trap_multiplier):
             if player.hp <= 0:
                     print("""
                           
-                          You died
+                You died
                           
                           """)
                     exit()
@@ -300,7 +298,7 @@ def trap(player, dmg_multiplier, trap_multiplier):
     if player.hp <= 0:
         print("""
                             
-                            You died
+                You died
               
               """)
 
@@ -496,6 +494,9 @@ That's not even a number... Let's go through this one...
         elif choice == "3":
             display_stats(player, dmg_multiplier)
         elif choice == "4":
+            print("""
+                            Restarting...
+""")
             exit()
         else:
             print("?")
