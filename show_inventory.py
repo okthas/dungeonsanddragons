@@ -1,5 +1,5 @@
 def show_inventory(player):
-    if player.inventory == [] or player.inventory == ['']:
+    if player.inventory == []:
        print("Nothing...")
        return None
     for item in player.inventory:

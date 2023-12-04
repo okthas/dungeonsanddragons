@@ -22,21 +22,43 @@ def main():
                 2. No
 -> """)
     if file_open == "1":
-        save = file.readline().split("-")
-        stats = save[0].split(",")
-        inventory = list(save[1].split(","))
-        player.name = stats[0]
-        player.strength = float(stats[1])
-        player.hp = float(stats[2])
-        player.hp_max = float(stats[3])
-        player.experience = float(stats[4])
-        player.level = int(stats[5])
-        dmg_multiplier = float(stats[6])
-        if inventory == []:
-            None
-        else:
-            for item in inventory:
-                player.inventory.append(item)
+        try:
+            save = file.readline().split("-")
+            stats = save[0].split(",")
+            inventory = save[1]
+            player.name = stats[0]
+            player.strength = float(stats[1])
+            player.hp = float(stats[2])
+            player.hp_max = float(stats[3])
+            player.experience = float(stats[4])
+            player.level = int(stats[5])
+            dmg_multiplier = float(stats[6])
+            item_variable = 0
+            if inventory == [''] or inventory == []:
+                inventory == []
+            else:
+                inventory = inventory.split(",")
+                for item2 in inventory:
+                    if  item2 == '':
+                        inventory.remove(item2)
+                    else:
+                        item = Item(player)
+                        inventory2 = inventory[item_variable]
+                        inventory2 = inventory2.split(";")
+                        item.name = inventory2[0]
+                        item.Attribute = inventory2[1]
+                        if item.Attribute == "Health bonus":
+                            item.health_bonus = float(inventory2[2])
+                            player.hp_max -= item.health_bonus
+                        else:
+                            item.strength_bonus = float(inventory2[2])
+                            player.strength -= item.strength_bonus
+                        player.inventory.append(item)
+                    item_variable += 1
+        except:
+            print("""
+                There is no save file...""")
+            file_open = "2"
 
     else:
         None
@@ -135,7 +157,11 @@ That's not even a number... Let's go through this one...
                 None
             else:
                 for item in player.inventory:
-                    save_string += str(item) + ","
+                    save_string += item.name + ";" + item.Attribute
+                    if item.Attribute == "Health bonus":
+                        save_string += ";" + str(item.health_bonus) + ","
+                    else:
+                        save_string += ";" + str(item.strength_bonus) + ","
             file.write(save_string)
             print("""
                             Restarting...

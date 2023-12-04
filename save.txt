@@ -1,1 +1,1 @@
-1,8.2,10,10,0,1,1-<Item.Item object at 0x0000026FA7C4B510>,
+Marie,5.0,14.9,10.0,0.0,1,1.0-Leather armor (1);Health bonus;4.9,
