@@ -10,11 +10,40 @@ from monster_battle import *
 from trap import *
 from item_in_mimic_chest import *
 from item_in_chest import *
+from remove_item import *
 
 def main():
-    trap_multiplier = 0
+    i = 0
     player = Player()
-    dmg_multiplier = input("""
+    file = open("save.txt", "r")
+    file_open = input ("""
+                Open save file?
+                1. Yes
+                2. No
+-> """)
+    if file_open == "1":
+        save = file.readline().split("-")
+        stats = save[0].split(",")
+        inventory = list(save[1].split(","))
+        print(inventory)
+        player.name = stats[0]
+        player.strength = float(stats[1])
+        player.hp = float(stats[2])
+        player.hp_max = float(stats[3])
+        player.experience = float(stats[4])
+        player.level = int(stats[5])
+        dmg_multiplier = float(stats[6])
+
+        for item in inventory:
+            if item == None:
+                break
+            player.inventory.append(item)
+
+    else:
+        None
+    trap_multiplier = 0
+    if file_open != "1":
+        dmg_multiplier = input("""
                 Choose difficulty:
                 1. Easy
                 2. Medium
@@ -22,20 +51,21 @@ def main():
 
 
 --> """)
-    if dmg_multiplier == "1":
-        dmg_multiplier = 3
-    elif dmg_multiplier == "2":
-        dmg_multiplier = 1.5
-    elif dmg_multiplier == "3":
-        dmg_multiplier = 1
-    else:
-        dmg_multiplier = float(dmg_multiplier) # lower the multiplier, higher the damage you take!
-    player.name = input("""
+        if dmg_multiplier == "1":
+            dmg_multiplier = 3
+        elif dmg_multiplier == "2":
+            dmg_multiplier = 1.5
+        elif dmg_multiplier == "3":
+            dmg_multiplier = 1
+        else:
+            dmg_multiplier = float(dmg_multiplier) # lower the multiplier, higher the damage you take!
+    if file_open != "1":
+        player.name = input("""
                 
                 What's your name? 
 """)
-    if player.name == "Marie":
-        delay_print("""
+        if player.name == "Marie":
+            delay_print("""
                             That sounds... Familiar
 """)
     while player.hp > 0:        
@@ -88,59 +118,11 @@ That's not even a number... Let's go through this one...
             scenario = rand.randint(1, 3)
             if scenario == 1:
                 player = monster_battle(player, dmg_multiplier, trap_multiplier)
-                while len(player.inventory) > 3:
-                    print("""
-                            My backpack is getting heavy, I need to get rid of something...
-                            """)
-                    show_inventory(player)
-                    remove_index = input("Remove index: ")
-                    if remove_index == "1" or remove_index == "2" or remove_index == "3" or remove_index == "4":
-                        remove_index = int(remove_index)
-                    else:
-                        print(""""
-                            I can't find it...
-                            
-                            """)
-                        continue
-                    index = player.inventory[remove_index-1]
-                    for item in player.inventory:
-                        if item == player.inventory[remove_index-1]:
-                            if item.Attribute == "Strength bonus":
-                                player.strength -= item.strength_bonus
-                            else:
-                                player.hp_max -= item.health_bonus
-                        else: None
-                    player.inventory.remove(index)
-                    if player.hp > player.hp_max:
-                        player.hp = player.hp_max
+                remove_item(player)
             elif scenario == 2:
                 item_in_chest(player)
                 if len(player.inventory) > 3:
-                    while len(player.inventory) > 3:
-                        print("""
-                                My backpack is getting heavy, I need to get rid of something...
-                                """)
-                        show_inventory(player)
-                        remove_index = input("Remove index: ")
-                        if remove_index == "1" or remove_index == "2" or remove_index == "3" or remove_index == "4":
-                            remove_index = int(remove_index)
-                        else:
-                            print(""""
-                                I can't find it...
-                                
-                                """)
-                            continue
-                        index = player.inventory[remove_index-1]
-                        for item in player.inventory:
-                            if item == player.inventory[remove_index-1]:
-                                if item.Attribute == "Strength bonus":
-                                    player.strength -= item.strength_bonus
-                                else:
-                                    player.hp_max -= item.health_bonus
-                            else: None
-                        player.inventory.remove(index)
-                        if player.hp > player.hp_max:
-                            player.hp = player.hp_max
+                    remove_item(player)
             elif scenario == 3:
                 trap(player, dmg_multiplier, trap_multiplier)
         elif choice == "2":
@@ -148,6 +130,13 @@ That's not even a number... Let's go through this one...
         elif choice == "3":
             display_stats(player, dmg_multiplier)
         elif choice == "4":
+            file = open("save.txt", "r")
+            save_string = str(player.name) + "," + str(player.strength) + "," + str(player.hp) + "," + str(player.hp_max) + "," + str(player.experience) + "," + str(player.level) + "," + str(dmg_multiplier) + "-"
+            item_variable = 0
+            for item in inventory:
+                save_string += str(item[item_variable]) + ","
+                item_variable += 1
+            file.write(save_string)
             print("""
                             Restarting...
 """)
