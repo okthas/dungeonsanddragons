@@ -25,7 +25,6 @@ def main():
         save = file.readline().split("-")
         stats = save[0].split(",")
         inventory = list(save[1].split(","))
-        print(inventory)
         player.name = stats[0]
         player.strength = float(stats[1])
         player.hp = float(stats[2])
@@ -33,11 +32,11 @@ def main():
         player.experience = float(stats[4])
         player.level = int(stats[5])
         dmg_multiplier = float(stats[6])
-
-        for item in inventory:
-            if item == None:
-                break
-            player.inventory.append(item)
+        if inventory == []:
+            None
+        else:
+            for item in inventory:
+                player.inventory.append(item)
 
     else:
         None
@@ -130,12 +129,13 @@ That's not even a number... Let's go through this one...
         elif choice == "3":
             display_stats(player, dmg_multiplier)
         elif choice == "4":
-            file = open("save.txt", "r")
+            file = open("save.txt", "w")
             save_string = str(player.name) + "," + str(player.strength) + "," + str(player.hp) + "," + str(player.hp_max) + "," + str(player.experience) + "," + str(player.level) + "," + str(dmg_multiplier) + "-"
-            item_variable = 0
-            for item in inventory:
-                save_string += str(item[item_variable]) + ","
-                item_variable += 1
+            if player.inventory == []:
+                None
+            else:
+                for item in player.inventory:
+                    save_string += str(item) + ","
             file.write(save_string)
             print("""
                             Restarting...
