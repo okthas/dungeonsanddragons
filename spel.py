@@ -151,19 +151,29 @@ That's not even a number... Let's go through this one...
         elif choice == "3":
             display_stats(player, dmg_multiplier)
         elif choice == "4":
-            file = open("save.txt", "w")
-            save_string = str(player.name) + "," + str(player.strength) + "," + str(player.hp) + "," + str(player.hp_max) + "," + str(player.experience) + "," + str(player.level) + "," + str(dmg_multiplier) + "-"
-            if player.inventory == []:
-                None
+            save_ = input("""
+                Save?
+                1. yes
+                2. no
+-> """)
+            if save_ == "1":
+                file = open("save.txt", "w")
+                save_string = str(player.name) + "," + str(player.strength) + "," + str(player.hp) + "," + str(player.hp_max) + "," + str(player.experience) + "," + str(player.level) + "," + str(dmg_multiplier) + "-"
+                if player.inventory == []:
+                    None
+                else:
+                    for item in player.inventory:
+                        save_string += item.name + ";" + item.Attribute
+                        if item.Attribute == "Health bonus":
+                            save_string += ";" + str(item.health_bonus) + ","
+                        else:
+                            save_string += ";" + str(item.strength_bonus) + ","
+                file.write(save_string)
+                print()
+                delay_print("Saving...")
+                print()
             else:
-                for item in player.inventory:
-                    save_string += item.name + ";" + item.Attribute
-                    if item.Attribute == "Health bonus":
-                        save_string += ";" + str(item.health_bonus) + ","
-                    else:
-                        save_string += ";" + str(item.strength_bonus) + ","
-            file.write(save_string)
-            print("""
+                print("""
                             Restarting...
 """)
             exit()

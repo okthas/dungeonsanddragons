@@ -1,1 +1,1 @@
-Marie,5.0,14.9,10.0,0.0,1,1.0-Leather armor (1);Health bonus;4.9,
+Marie,9.7,14.9,0.1999999999999993,0.0,1,1.0-Leather armor (1);Health bonus;4.9,
