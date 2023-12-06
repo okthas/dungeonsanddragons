@@ -119,7 +119,7 @@ def main():
     I         I     I         I     I         I     I
     I         I     I         I     I         I     I
 ____________________________________________________I """)
-                    choice2 = int(input("Which door should I choose... "))
+                    choice2 = float(input("Which door should I choose... "))
                     if choice2 != 1 and choice2 != 2 and choice2 != 3:
                         if choice2%2 == 0:
                             delay_print("""
