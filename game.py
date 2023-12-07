@@ -26,13 +26,6 @@ def main():
             save = file.readline().split("-")
             stats = save[0].split(",")
             inventory = save[1]
-            player.name = stats[0]
-            player.strength = float(stats[1])
-            player.hp = float(stats[2])
-            player.hp_max = float(stats[3])
-            player.experience = float(stats[4])
-            player.level = int(stats[5])
-            dmg_multiplier = float(stats[6])
             item_variable = 0
             if inventory == [''] or inventory == []:
                 inventory == []
@@ -55,6 +48,13 @@ def main():
                             player.strength -= item.strength_bonus
                         player.inventory.append(item)
                     item_variable += 1
+            player.name = stats[0]
+            player.strength = float(stats[1])
+            player.hp = float(stats[2])
+            player.hp_max = float(stats[3])
+            player.experience = float(stats[4])
+            player.level = int(stats[5])
+            dmg_multiplier = float(stats[6])
         except:
             print("""
                 There is no save file...""")
@@ -96,7 +96,8 @@ def main():
                 1. Choose a door
                 2. Check inventory
                 3. Display stats
-                4. Quit
+                4. Save
+                5. Quit
                 
                 """)
             
@@ -151,30 +152,24 @@ That's not even a number... Let's go through this one...
         elif choice == "3":
             display_stats(player, dmg_multiplier)
         elif choice == "4":
-            save_ = input("""
-                Save?
-                1. yes
-                2. no
--> """)
-            if save_ == "1":
-                file = open("save.txt", "w")
-                save_string = str(player.name) + "," + str(player.strength) + "," + str(player.hp) + "," + str(player.hp_max) + "," + str(player.experience) + "," + str(player.level) + "," + str(dmg_multiplier) + "-"
-                if player.inventory == []:
-                    None
-                else:
-                    for item in player.inventory:
-                        save_string += item.name + ";" + item.Attribute
-                        if item.Attribute == "Health bonus":
-                            save_string += ";" + str(item.health_bonus) + ","
-                        else:
-                            save_string += ";" + str(item.strength_bonus) + ","
-                file.write(save_string)
-                print()
-                delay_print("Saving...")
-                print()
+            file = open("save.txt", "w")
+            save_string = str(player.name) + "," + str(player.strength) + "," + str(player.hp) + "," + str(player.hp_max) + "," + str(player.experience) + "," + str(player.level) + "," + str(dmg_multiplier) + "-"
+            if player.inventory == []:
+                None
             else:
-                print("""
-                            Restarting...
+                for item in player.inventory:
+                    save_string += item.name + ";" + item.Attribute
+                    if item.Attribute == "Health bonus":
+                        save_string += ";" + str(item.health_bonus) + ","
+                    else:
+                        save_string += ";" + str(item.strength_bonus) + ","
+            file.write(save_string)
+            print()
+            delay_print("Saving...")
+            print()
+        elif choice == "5":
+            print("""
+                        Restarting...
 """)
             exit()
         else:

@@ -3,7 +3,7 @@ def show_inventory(player):
        print("Nothing...")
        return None
     for item in player.inventory:
-        try:
+        if item.Attribute == "Strength bonus":
             print(f"{item.name} with strength bonus {round(item.strength_bonus,2)}!")
-        except:
+        else:
             print(f"{item.name} with health bonus {round(item.health_bonus,2)}!") 

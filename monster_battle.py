@@ -83,15 +83,15 @@ ___________________________________________________
 
         Your level has increased!
 Level: {player.level} -> {player.level+1}
-Max HP: {round(player.hp_max,2)} -> {round(player.hp_max+1+0.7*player.level+0.7,2)}
-STR: {round(player.strength,2)} -> {round(player.strength+1+0.4*player.level+0.4,2)}                         
+Max HP: {round(player.hp_max,2)} -> {round(player.hp_max+1,2)}
+STR: {round(player.strength,2)} -> {round(player.strength+1,2)}                         
 
 ___________________________________________________
 """)
                     player.experience -= 24 + player.level**1.9
                     player.level += 1
-                    player.hp_max += 1 + 0.7*player.level
-                    player.strength += 1  + 0.4*player.level
+                    player.hp_max += 1
+                    player.strength += 1
                 if monster.type == "Mimic":
                     item_in_mimic_chest(player)
                     
