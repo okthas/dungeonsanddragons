@@ -119,13 +119,16 @@ class Item:
                 player.strength += player.level
         elif self.name == "Artifact":
             self.Attribute = "Artifact"
-            level = rand.randint(0,2)
+            level = rand.randint(0,3)
             if level == 0:
-                self.name = "Ominous artifact"
-                self.Artifact_ability = f"Enemies deal 30% less damage"
-            if level == 1:
-                self.name = "Blessed artifact"
-                self.Artifact_ability = f"You gain 50% more fire elemental damage"
-            if level == 2:
-                self.name = "Cold artifact"
-                self.Artifact_ability = f"You gain 50% more ice elemental damage"
+                self.name = f"Ominous artifact ({player.level})"
+                self.Artifact_ = 10 + 2*player.level
+                self.Artifact_ability = f"Enemies deal {self.Artifact_}% less damage"
+            elif level == 1:
+                self.name = f"Blessed artifact ({player.level})"
+                self.Artifact_ = 40 + 10*player.level
+                self.Artifact_ability = f"You gain {self.Artifact_}% more fire elemental damage"
+            else:
+                self.name = f"Cold artifact ({player.level})"
+                self.Artifact_ = 40 + 10*player.level
+                self.Artifact_ability = f"You gain {self.Artifact_}% more ice elemental damage"

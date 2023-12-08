@@ -16,23 +16,27 @@ def main():
     Artifact = False
     player = Player()
     file = open("save.txt", "r")
-    file_open = input ("""
+    try:
+        save = file.readline().split("-")
+        file_open = input ("""
                 Open save file?
                 1. Yes
                 2. No
--> """)
+
+--> """)
+    except:
+        None
     if file_open == "1":
         try:
-            save = file.readline().split("-")
             stats = save[0].split(",")
             inventory = save[1]
             try:
                 Artifact_pouch = save[2]
                 Artifact_pouch = Artifact_pouch.split(";")
-                for item in Artifact_pouch:
-                    item.name = Artifact_pouch[0]
-                    item.Artifact_bonus = Artifact_pouch[1]
-                    player.Artifact_pouch.append(item)
+                item = Item(player)
+                item.name = Artifact_pouch[0]
+                item.Artifact_ability = Artifact_pouch[1]
+                player.Artifact_pouch.append(item)
             except:
                 None
             item_variable = 0
@@ -66,7 +70,7 @@ def main():
             dmg_multiplier = float(stats[6])
         except:
             print("""
-                There is no save file...""")
+                Savefile corrupt!""")
             file_open = "2"
 
     else:
@@ -152,7 +156,7 @@ That's not even a number... Let's go through this one...
                 remove_item(player,Artifact)
             elif scenario == 2:
                 Artifact = False
-                item_in_chest(player,Artifact)
+                item_in_chest(player)
                 if len(player.inventory) > 3:
                     remove_item(player,Artifact)
                 if len(player.Artifact_pouch) > 1:
@@ -181,7 +185,7 @@ That's not even a number... Let's go through this one...
             else:
                 save_string += "-"
                 for item in player.Artifact_pouch:
-                    save_string += "-" + item.name + ";" + item.Artifact_ability
+                    save_string += item.name + ";" + item.Artifact_ability
             file.write(save_string)
             print()
             delay_print("Saving...")

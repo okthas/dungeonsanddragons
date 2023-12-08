@@ -34,12 +34,12 @@ def monster_battle(player, dmg_multiplier, trap_multiplier):
                 None
             else:
                 for item in player.Artifact_pouch:
-                    if item.Artifact_ability == f"Enemies deal 30% less damage":
-                        enemy_debuff = 0.65
-                    if item.Artifact_ability == f"You gain 50% more fire elemental damage":
-                        f_bonus = 1.5
-                    if item.Artifact_ability == f"You gain 50% more ice elemental damage":
-                        i_bonus = 1.5
+                    if item.name == f"Ominous artifact ({player.level})":
+                        enemy_debuff = 1 - item.Artifact_*0.01
+                    if item.name == f"Blessed artifact ({player.level})":
+                        f_bonus = 1 + item.Artifact_*0.01
+                    if item.name == f"Cold artifact ({player.level})":
+                        i_bonus = 1 + item.Artifact_*0.01
             p_strength = player.strength
             for item in player.inventory:
                 if item.Attribute == "Strength bonus":
@@ -65,7 +65,7 @@ def monster_battle(player, dmg_multiplier, trap_multiplier):
                     break
                 player.hp -= enemy_debuff*monster.monster_strength/dmg_multiplier
             p_hp2 = player.hp
-            print(f"You lost {round(p_hp-p_hp2,2)} HP! You HP is now {round(player.hp,2)}")
+            print(f"You lost {round(p_hp-p_hp2,2)} HP! Your HP is now {round(player.hp,2)}")
             if player.hp <= 0:
                     print("""
                           
