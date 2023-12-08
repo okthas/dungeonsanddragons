@@ -1,4 +1,8 @@
-def show_inventory(player):
+def show_inventory(player,Artifact):
+    if Artifact:
+        for item in player.Artifact_pouch:
+            print(item.name)
+        Artifact = False
     if player.inventory == []:
        print("Nothing...")
        return None

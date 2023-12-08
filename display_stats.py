@@ -9,6 +9,11 @@ def display_stats(player, dmg_multiplier):
     else:
         print(f"Difficulty: Custom({dmg_multiplier})")
     print(f"Name: {player.name}")
+    if len(player.Artifact_pouch) > 0:
+        for item in player.Artifact_pouch:
+            print(f"Artifact: {item.name}")
+            print(f"{item.Artifact_ability}")
+    print(f"")
     print(f"Experience: {round(player.experience,2)}/{round(24 + player.level**1.9,2)}")
     print(f"Level: {player.level}")
     print(f"Strength: {round(player.strength,2)}")

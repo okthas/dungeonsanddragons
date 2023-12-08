@@ -10,7 +10,7 @@ def trap(player, dmg_multiplier, trap_multiplier):
         trap_damage = 0.5/dmg_multiplier*rand.randint(0, 2) + 0.6*player.level
         player.hp -= trap_damage
         print(f"""
-You have been caught in the trap and lost {round(trap_damage,2)} HP!""")
+You have been caught in the trap and lost {round(trap_damage,2)} HP! your HP is now {round(player.hp,2)}""")
     else:
         print("""
 You managed to dodge the trap!""")

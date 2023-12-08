@@ -13,7 +13,7 @@ from item_in_chest import *
 from remove_item import *
 
 def main():
-    i = 0
+    Artifact = False
     player = Player()
     file = open("save.txt", "r")
     file_open = input ("""
@@ -26,6 +26,15 @@ def main():
             save = file.readline().split("-")
             stats = save[0].split(",")
             inventory = save[1]
+            try:
+                Artifact_pouch = save[2]
+                Artifact_pouch = Artifact_pouch.split(";")
+                for item in Artifact_pouch:
+                    item.name = Artifact_pouch[0]
+                    item.Artifact_bonus = Artifact_pouch[1]
+                    player.Artifact_pouch.append(item)
+            except:
+                None
             item_variable = 0
             if inventory == [''] or inventory == []:
                 inventory == []
@@ -140,15 +149,19 @@ That's not even a number... Let's go through this one...
             scenario = rand.randint(1, 3)
             if scenario == 1:
                 player = monster_battle(player, dmg_multiplier, trap_multiplier)
-                remove_item(player)
+                remove_item(player,Artifact)
             elif scenario == 2:
-                item_in_chest(player)
+                Artifact = False
+                item_in_chest(player,Artifact)
                 if len(player.inventory) > 3:
-                    remove_item(player)
+                    remove_item(player,Artifact)
+                if len(player.Artifact_pouch) > 1:
+                    Artifact = True
+                    remove_item(player,Artifact)
             elif scenario == 3:
                 trap(player, dmg_multiplier, trap_multiplier)
         elif choice == "2":
-            show_inventory(player)
+            show_inventory(player,Artifact)
         elif choice == "3":
             display_stats(player, dmg_multiplier)
         elif choice == "4":
@@ -163,6 +176,12 @@ That's not even a number... Let's go through this one...
                         save_string += ";" + str(item.health_bonus) + ","
                     else:
                         save_string += ";" + str(item.strength_bonus) + ","
+            if player.Artifact_pouch == []:
+                None
+            else:
+                save_string += "-"
+                for item in player.Artifact_pouch:
+                    save_string += "-" + item.name + ";" + item.Artifact_ability
             file.write(save_string)
             print()
             delay_print("Saving...")
