@@ -3,6 +3,7 @@ def show_inventory(player,Artifact):
         for item in player.Artifact_pouch:
             print(item.name)
         Artifact = False
+        return None
     if player.inventory == []:
        print("Nothing...")
        return None

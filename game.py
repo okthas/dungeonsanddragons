@@ -13,19 +13,18 @@ from item_in_chest import *
 from remove_item import *
 
 def main():
+    file_open = False
     Artifact = False
     player = Player()
     file = open("save.txt", "r")
-    try:
-        save = file.readline().split("-")
+    save = file.readline().split("-")
+    if save != ['']:
         file_open = input ("""
                 Open save file?
                 1. Yes
                 2. No
 
 --> """)
-    except:
-        None
     if file_open == "1":
         try:
             stats = save[0].split(",")
@@ -36,6 +35,8 @@ def main():
                 item = Item(player)
                 item.name = Artifact_pouch[0]
                 item.Artifact_ability = Artifact_pouch[1]
+                item.Artifact_ = float(Artifact_pouch[2])
+                item.Artifact = Artifact_pouch[3]
                 player.Artifact_pouch.append(item)
             except:
                 None
@@ -58,6 +59,7 @@ def main():
                             player.hp_max -= item.health_bonus
                         else:
                             item.strength_bonus = float(inventory2[2])
+                            item.preset = inventory2[3]
                             player.strength -= item.strength_bonus
                         player.inventory.append(item)
                     item_variable += 1
@@ -179,16 +181,16 @@ That's not even a number... Let's go through this one...
                     if item.Attribute == "Health bonus":
                         save_string += ";" + str(item.health_bonus) + ","
                     else:
-                        save_string += ";" + str(item.strength_bonus) + ","
+                        save_string += ";" + str(item.strength_bonus) + ";" + item.preset + ","
             if player.Artifact_pouch == []:
                 None
             else:
                 save_string += "-"
                 for item in player.Artifact_pouch:
-                    save_string += item.name + ";" + item.Artifact_ability
+                    save_string += item.name + ";" + item.Artifact_ability + ";" + str(item.Artifact_) + ";" + item.Artifact
             file.write(save_string)
             print()
-            delay_print("Saving...")
+            print("Saved!")
             print()
         elif choice == "5":
             print("""

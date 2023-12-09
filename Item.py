@@ -33,7 +33,7 @@ class Item:
             x = 1
         else: 
             x = 0
-        self.name = rand.choice(["Sword", "Shield", "Bow", "Armor", "J", "J", "J", "Artifact"])
+        self.name = rand.choice(["Sword", "Shield", "Bow", "Armor", "J", "J", "J", "Artifact"]) 
         if player.hp == player.hp_max:
             self.name = rand.choice(["Sword", "Shield", "Bow", "Armor"])
         if player.hp < player.hp_max*0.35:
@@ -122,13 +122,16 @@ class Item:
             level = rand.randint(0,3)
             if level == 0:
                 self.name = f"Ominous artifact ({player.level})"
-                self.Artifact_ = 10 + 2*player.level
+                self.Artifact = "O"
+                self.Artifact_ = 10 + 2.5*player.level
                 self.Artifact_ability = f"Enemies deal {self.Artifact_}% less damage"
             elif level == 1:
                 self.name = f"Blessed artifact ({player.level})"
+                self.Artifact = "F"
                 self.Artifact_ = 40 + 10*player.level
                 self.Artifact_ability = f"You gain {self.Artifact_}% more fire elemental damage"
             else:
                 self.name = f"Cold artifact ({player.level})"
+                self.Artifact = "I"
                 self.Artifact_ = 40 + 10*player.level
                 self.Artifact_ability = f"You gain {self.Artifact_}% more ice elemental damage"

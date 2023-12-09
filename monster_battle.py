@@ -28,18 +28,19 @@ def monster_battle(player, dmg_multiplier, trap_multiplier):
         """)
         choose = input("Attack or flee?  ")
         if choose == "1":
+            enemy_debuff = 1
             f_bonus = 1
             i_bonus = 1
             if player.Artifact_pouch == []:
                 None
             else:
                 for item in player.Artifact_pouch:
-                    if item.name == f"Ominous artifact ({player.level})":
-                        enemy_debuff = 1 - item.Artifact_*0.01
-                    if item.name == f"Blessed artifact ({player.level})":
-                        f_bonus = 1 + item.Artifact_*0.01
-                    if item.name == f"Cold artifact ({player.level})":
-                        i_bonus = 1 + item.Artifact_*0.01
+                    if item.Artifact == "O":
+                        enemy_debuff = 1 - item.Artifact_/100
+                    if item.Artifact == "F":
+                        f_bonus = 1 + item.Artifact_/100
+                    if item.Artifact == "I":
+                        i_bonus = 1 + item.Artifact_/100
             p_strength = player.strength
             for item in player.inventory:
                 if item.Attribute == "Strength bonus":
@@ -55,30 +56,28 @@ def monster_battle(player, dmg_multiplier, trap_multiplier):
                             p_strength += f_bonus*0.5*item.strength_bonus
                 else:
                     None
-            enemy_debuff = 1
             while monster.monster_hp > 0:
                 monster.monster_hp -= p_strength
                 print(f"You did {round(p_strength,2)} DMG! Monster's HP is now {round(monster.monster_hp)}")
                 if monster.monster_hp <= 0:
                     break
                 player.hp -= enemy_debuff*monster.monster_strength/dmg_multiplier
-                if player.hp < 0:
-                    player.hp = 0
                 print(f"The monster did {round(enemy_debuff*monster.monster_strength/dmg_multiplier,2)} DMG! Your HP is now {round(player.hp,2)}")
-                x = input("""
-                1. Yes
-Attack again? """)
-                if x == "1":
-                    None
-                else:
-                    return player
-            if player.hp <= 0:
+                if player.hp <= 0:
                     print("""
                           
                 You died
                           
                           """)
                     exit()
+                x = input("""
+                1. Yes
+                2. No
+Attack again? """)
+                if x == "1":
+                    None
+                else:
+                    return player
             if monster.monster_hp <= 0:
                 if monster.Attribute == "Last boss":
                     print("""

@@ -27,9 +27,7 @@ def remove_item(player,Artifact):
                     player.Artifact_pouch.remove(index)
                     ""
                 else: None
-            player.inventory.remove(index)
-            if player.hp > player.hp_max:
-                player.hp = player.hp_max
+            Artifact = False
             return None
     while len(player.inventory) > 3:
         print("""
