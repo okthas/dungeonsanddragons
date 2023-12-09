@@ -56,16 +56,22 @@ def monster_battle(player, dmg_multiplier, trap_multiplier):
                 else:
                     None
             enemy_debuff = 1
-            p_hp = player.hp
             while monster.monster_hp > 0:
                 monster.monster_hp -= p_strength
+                print(f"You did {round(p_strength,2)} DMG! Monster's HP is now {round(monster.monster_hp)}")
                 if monster.monster_hp <= 0:
-                    oneshotmultiplier = 2*player.level/dmg_multiplier*monster.monster_strength/player.hp_max
-                    player.hp -= enemy_debuff*oneshotmultiplier
                     break
                 player.hp -= enemy_debuff*monster.monster_strength/dmg_multiplier
-            p_hp2 = player.hp
-            print(f"You lost {round(p_hp-p_hp2,2)} HP! Your HP is now {round(player.hp,2)}")
+                if player.hp < 0:
+                    player.hp = 0
+                print(f"The monster did {round(enemy_debuff*monster.monster_strength/dmg_multiplier,2)} DMG! Your HP is now {round(player.hp,2)}")
+                x = input("""
+                1. Yes
+Attack again? """)
+                if x == "1":
+                    None
+                else:
+                    return player
             if player.hp <= 0:
                     print("""
                           

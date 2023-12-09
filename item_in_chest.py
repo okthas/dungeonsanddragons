@@ -17,6 +17,6 @@ def item_in_chest(player):
     if item.Attribute == "Strength bonus":
         print(f"You found a new weapon: {item.name} in the chest!")
     elif item.Attribute == "Health potion":
-        print(f"You found a health potion in the chest that gave {round(3.4 + player.level*2,2)} HP! You HP is now {round(player.hp)}/{round()}")
+        print(f"You found a health potion in the chest that gave {round(3.4 + player.level*2,2)} HP! You HP is now {round(player.hp)}/{round(player.hp_max)}")
     else:
         print(f"You found a defensive item: {item.name} in the chest!")

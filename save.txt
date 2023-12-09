@@ -1,1 +1,0 @@
-GiMMeRs,12.9,10.254545454545454,20.1,1.1678680338527734,3,1.0-Scaling Wooden sword (2);Strength bonus;5.4,Leather armor (3);Health bonus;8.100000000000001,Plain Wooden bow (3);Strength bonus;4.5,-Cold artifact;You gain 50% more ice elemental damage
