@@ -13,20 +13,23 @@ from item_in_chest import *
 from remove_item import *
 
 def main():
-    file_open = False
+    file_open = False 
     Artifact = False
     player = Player()
     file = open("save.txt", "r")
     save = file.readline().split("-")
-    if save != ['']:
-        file_open = input ("""
+
+    file_open = input ("""
                 Open save file?
                 1. Yes
                 2. No
 
---> """)
+                --> """)
     if file_open == "1":
         try:
+
+            file = open("save.txt", "r")
+            save = file.readline().split("-")          
             stats = save[0].split(",")
             inventory = save[1]
             try:
@@ -70,16 +73,15 @@ def main():
             player.experience = float(stats[4])
             player.level = int(stats[5])
             dmg_multiplier = float(stats[6])
-        except:
-            print("""
-                Savefile corrupt!""")
+        except FileNotFoundError:
+            print("Save file not found.")
             file_open = "2"
 
+           
     else:
         None
     trap_multiplier = 0
-    if file_open != "1":
-        dmg_multiplier = input("""
+    dmg_multiplier = input("""
                 Choose difficulty:
                 1. Easy
                 2. Medium
@@ -87,14 +89,14 @@ def main():
 
 
 --> """)
-        if dmg_multiplier == "1":
-            dmg_multiplier = 3
-        elif dmg_multiplier == "2":
-            dmg_multiplier = 1.5
-        elif dmg_multiplier == "3":
-            dmg_multiplier = 1
-        else:
-            dmg_multiplier = float(dmg_multiplier) # lower the multiplier, higher the damage you take!
+    if dmg_multiplier == "1":
+        dmg_multiplier = 3
+    elif dmg_multiplier == "2":
+        dmg_multiplier = 1.5
+    elif dmg_multiplier == "3":
+        dmg_multiplier = 1
+    else:
+        print("Choose 1, 2 or 3!")
     if file_open != "1":
         player.name = input("""
                 
