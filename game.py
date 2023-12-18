@@ -19,7 +19,6 @@ def main():
     file = open("save.txt", "r")
     save = file.readline().split("-")
     if save != ['']:
-
         file_open = input ("""
                     Open save file?
                     1. Yes
@@ -81,25 +80,29 @@ def main():
            
     else:
         None
-    trap_multiplier = 0
-    dmg_multiplier = input("""
-                Choose difficulty:
-                1. Easy
-                2. Medium
-                3. Hard
+    trap_multiplier = 0    
+    while True:
 
-                    --> """)
-    if dmg_multiplier == "1":
-        dmg_multiplier = 3
-    elif dmg_multiplier == "2":
-        dmg_multiplier = 1.5
-    elif dmg_multiplier == "3":
-        dmg_multiplier = 1
-    else:
-        try: 
-            dmg_multiplier = float(dmg_multiplier)
-        except:
-            print("Choose 1, 2 or 3!")
+        dmg_multiplier = input("""
+                    Choose difficulty:
+                    1. Easy
+                    2. Medium
+                    3. Hard
+
+                        --> """)
+        if dmg_multiplier == "1":
+            dmg_multiplier = 3
+        elif dmg_multiplier == "2":
+            dmg_multiplier = 1.5
+        elif dmg_multiplier == "3":
+            dmg_multiplier = 1
+        else:
+            try: 
+                dmg_multiplier = float(dmg_multiplier)
+            except:
+                print("Choose 1, 2 or 3!")
+                continue
+        break        
     if file_open != "1":
         player.name = input("""
                 
@@ -124,8 +127,7 @@ def main():
         choice = input("What should I do? ")
 
         if choice == "1":
-            x = 1
-            while x == 1:
+            while True:
                 try:
                     print("""
                                     
@@ -151,12 +153,12 @@ That door isn't here... is it?
 ...
 """)
                         continue
-                    x = 0
+                    break
                 except:
                     delay_print("""
 That's not even a number... Let's go through this one...
 """)
-                    x = 0
+                    break
             scenario = rand.randint(1, 3)
             if scenario == 1:
                 player = monster_battle(player, dmg_multiplier, trap_multiplier)
