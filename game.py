@@ -18,13 +18,14 @@ def main():
     player = Player()
     file = open("save.txt", "r")
     save = file.readline().split("-")
+    if save != ['']:
 
-    file_open = input ("""
-                Open save file?
-                1. Yes
-                2. No
+        file_open = input ("""
+                    Open save file?
+                    1. Yes
+                    2. No
 
-                --> """)
+                    --> """)
     if file_open == "1":
         try:
 
@@ -87,8 +88,7 @@ def main():
                 2. Medium
                 3. Hard
 
-
---> """)
+                    --> """)
     if dmg_multiplier == "1":
         dmg_multiplier = 3
     elif dmg_multiplier == "2":
@@ -96,7 +96,10 @@ def main():
     elif dmg_multiplier == "3":
         dmg_multiplier = 1
     else:
-        print("Choose 1, 2 or 3!")
+        try: 
+            dmg_multiplier = float(dmg_multiplier)
+        except:
+            print("Choose 1, 2 or 3!")
     if file_open != "1":
         player.name = input("""
                 
