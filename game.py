@@ -11,11 +11,13 @@ from trap import *
 from item_in_mimic_chest import *
 from item_in_chest import *
 from remove_item import *
+from load_save import *
+from save_data import *
 
 def main():
-    file_open = False 
     Artifact = False
     player = Player()
+    file_open = False 
     file = open("save.txt", "r")
     save = file.readline().split("-")
     if save != ['']:
@@ -26,60 +28,16 @@ def main():
 
                     --> """)
     if file_open == "1":
-        try:
-
-            file = open("save.txt", "r")
-            save = file.readline().split("-")          
-            stats = save[0].split(",")
-            inventory = save[1]
-            try:
-                Artifact_pouch = save[2]
-                Artifact_pouch = Artifact_pouch.split(";")
-                item = Item(player)
-                item.name = Artifact_pouch[0]
-                item.Artifact_ability = Artifact_pouch[1]
-                item.Artifact_ = float(Artifact_pouch[2])
-                item.Artifact = Artifact_pouch[3]
-                player.Artifact_pouch.append(item)
-            except:
-                None
-            item_variable = 0
-            if inventory == [''] or inventory == []:
-                inventory == []
-            else:
-                inventory = inventory.split(",")
-                for item2 in inventory:
-                    if  item2 == '':
-                        inventory.remove(item2)
-                    else:
-                        item = Item(player)
-                        inventory2 = inventory[item_variable]
-                        inventory2 = inventory2.split(";")
-                        item.name = inventory2[0]
-                        item.Attribute = inventory2[1]
-                        if item.Attribute == "Health bonus":
-                            item.health_bonus = float(inventory2[2])
-                            player.hp_max -= item.health_bonus
-                        else:
-                            item.strength_bonus = float(inventory2[2])
-                            item.preset = inventory2[3]
-                            player.strength -= item.strength_bonus
-                        player.inventory.append(item)
-                    item_variable += 1
-            player.name = stats[0]
-            player.strength = float(stats[1])
-            player.hp = float(stats[2])
-            player.hp_max = float(stats[3])
-            player.experience = float(stats[4])
-            player.level = int(stats[5])
-            dmg_multiplier = float(stats[6])
-        except FileNotFoundError:
-            print("Save file not found.")
-            file_open = "2"
-
-           
+        load_save(player)
     else:
-        None
+        player.name = input("""
+                
+                What's your name? 
+""")
+        if player.name == "Marie":
+            delay_print("""
+                            That sounds... Familiar
+""")
     trap_multiplier = 0    
     while True:
 
@@ -89,7 +47,7 @@ def main():
                     2. Medium
                     3. Hard
 
-                        --> """)
+                    --> """)
         if dmg_multiplier == "1":
             dmg_multiplier = 3
         elif dmg_multiplier == "2":
@@ -103,15 +61,6 @@ def main():
                 print("Choose 1, 2 or 3!")
                 continue
         break        
-    if file_open != "1":
-        player.name = input("""
-                
-                What's your name? 
-""")
-        if player.name == "Marie":
-            delay_print("""
-                            That sounds... Familiar
-""")
     while player.hp > 0:        
         print(
                 """
@@ -178,27 +127,7 @@ That's not even a number... Let's go through this one...
         elif choice == "3":
             display_stats(player, dmg_multiplier)
         elif choice == "4":
-            file = open("save.txt", "w")
-            save_string = str(player.name) + "," + str(player.strength) + "," + str(player.hp) + "," + str(player.hp_max) + "," + str(player.experience) + "," + str(player.level) + "," + str(dmg_multiplier) + "-"
-            if player.inventory == []:
-                None
-            else:
-                for item in player.inventory:
-                    save_string += item.name + ";" + item.Attribute
-                    if item.Attribute == "Health bonus":
-                        save_string += ";" + str(item.health_bonus) + ","
-                    else:
-                        save_string += ";" + str(item.strength_bonus) + ";" + item.preset + ","
-            if player.Artifact_pouch == []:
-                None
-            else:
-                save_string += "-"
-                for item in player.Artifact_pouch:
-                    save_string += item.name + ";" + item.Artifact_ability + ";" + str(item.Artifact_) + ";" + item.Artifact
-            file.write(save_string)
-            print()
-            print("Saved!")
-            print()
+            save_data(player, dmg_multiplier)
         elif choice == "5":
             print("""
                         Restarting...

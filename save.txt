@@ -1,0 +1,1 @@
+1,1.0,0.40416666666666834,14.9,3.75,1,3-Leather armor (1);Health bonus;4.9,-Ominous artifact (1);Enemies deal 12.5% less damage;12.5;O
